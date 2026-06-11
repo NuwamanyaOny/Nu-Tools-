@@ -64,7 +64,9 @@ body.dark .nav-cta{color:#60a5fa!important;}
 .hero h1 .white{color:var(--hero-white);}
 .hero h1 .grad{background:linear-gradient(90deg,#3b82f6,#8b5cf6,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .hero-sub{color:var(--muted);font-size:16px;max-width:440px;margin:14px auto 36px;line-height:1.65;font-weight:400;}
-.hero-stats{display:inline-flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:40px;padding:8px 22px;font-size:12.5px;font-weight:600;gap:4px;}
+.hero-stats{display:inline-block;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:10px 20px;font-size:12px;font-weight:600;max-width:95vw;}
+.hero-stats-row{display:flex;align-items:center;gap:4px;flex-wrap:nowrap;}
+.hero-stat-stack{display:flex;flex-direction:column;align-items:center;gap:2px;}
 .hero-stat{display:flex;align-items:center;gap:5px;color:var(--muted);}
 .hero-stat b{color:var(--text);}
 .sep{color:var(--border2);margin:0 10px;}
@@ -220,11 +222,16 @@ body.dark .modal{box-shadow:0 20px 60px rgba(0,0,0,0.5);}
   </h1>
   <p class="hero-sub">Every Nu Tool — downloaded, used, and trusted across the world. Built by Software Support 🛠️.</p>
   <div class="hero-stats">
-    <div class="hero-stat"><span>🧰</span> <b id="heroCount">47</b> tools</div>
-    <span class="sep">·</span>
-    <div class="hero-stat"><span>⬇️</span> <b>Free</b> downloads</div>
-    <span class="sep">·</span>
-    <div class="hero-stat"><span>🌍</span> <b>Worldwide</b></div>
+    <div class="hero-stats-row">
+      <div class="hero-stat"><span>🧰</span> <b id="heroCount">47</b> tools</div>
+      <span class="sep">·</span>
+      <div class="hero-stat"><span>👁️</span> <b id="viewCount">...</b> views</div>
+      <span class="sep">·</span>
+      <div class="hero-stat-stack">
+        <div class="hero-stat"><span>⬇️</span> <b>Free</b> downloads</div>
+        <div class="hero-stat" style="justify-content:center;"><span>🌍</span> <b>Global</b></div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -377,6 +384,21 @@ function genStars(){
 genStars();
 document.getElementById('heroCount').textContent=TOOLS.length;
 
+// View counter — starts from 100, increments on each real visit
+const BASE_VIEWS = 1000;
+fetch('https://api.countapi.xyz/hit/nu-tools-hub/visits')
+  .then(r => r.json())
+  .then(data => {
+    const total = (data.value || 1) + BASE_VIEWS;
+    document.getElementById('viewCount').textContent = total.toLocaleString();
+  })
+  .catch(() => {
+    // Fallback if API is unavailable
+    const stored = parseInt(localStorage.getItem('nu_views') || '0') + 1;
+    localStorage.setItem('nu_views', stored);
+    document.getElementById('viewCount').textContent = (stored + BASE_VIEWS).toLocaleString();
+  });
+
 function toggleTheme(){
   const isDark=document.body.classList.toggle('dark');
   document.getElementById('themeToggle').textContent=isDark?'☀️ Light':'🌙 Dark';
@@ -393,7 +415,7 @@ function getBadgeLabel(b){return b?b.toUpperCase():'FREE';}
 function renderTools(){
   const grid=document.getElementById('toolGrid');
   const q=currentSearch.toLowerCase();
-  const visible=TOOLS.filter(t=>{
+  const visible=[...TOOLS].sort((a,b)=>b.id-a.id).filter(t=>{
     const matchCat=currentCat==='all'||(currentCat==='vip'?t.badge==='vip':t.category===currentCat);
     const matchQ=!q||t.name.toLowerCase().includes(q)||t.desc.toLowerCase().includes(q)||t.longDesc.toLowerCase().includes(q);
     return matchCat&&matchQ;
