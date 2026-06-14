@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#2563eb">
+<meta name="description" content="Premium Tools, Apps & Utilities — All Free to Download. By Software Support.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Nu Tools">
 <title>Software Support 🛠️ — Tools Hub</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
@@ -190,9 +196,70 @@ body.dark .modal{box-shadow:0 20px 60px rgba(0,0,0,0.5);}
   nav .nav-links a:not(.nav-cta){display:none;}
   .email-inner{flex-direction:column;align-items:flex-start;}
 }
+
+
+
+
+/* BACK TO TOP */
+#backTop{position:fixed;bottom:24px;right:16px;width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#1d4ed8,#7c3aed);border:none;color:#fff;font-size:18px;cursor:pointer;display:grid;place-items:center;box-shadow:0 4px 14px rgba(37,99,235,0.4);opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;z-index:200;}
+#backTop.show{opacity:1;pointer-events:all;}
+#backTop:hover{transform:scale(1.1);}
+
+/* WHATSAPP BUTTON */
+
+.wa-icon{font-size:20px;line-height:1;}
+
+/* WHATSAPP SECTION */
+.wa-section{position:relative;z-index:1;max-width:648px;margin:24px auto 0;padding:0 16px;}
+.wa-inner{background:rgba(37,211,102,0.06);border:1px solid rgba(37,211,102,0.2);border-radius:16px;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px;}
+.wa-text h3{font-size:14px;font-weight:700;color:#16a34a;}
+body.dark .wa-text h3{color:#4ade80;}
+.wa-text p{font-size:12px;color:var(--muted);margin-top:2px;}
+.wa-link{display:inline-flex;align-items:center;gap:6px;background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.35);color:#16a34a;padding:8px 14px;border-radius:8px;text-decoration:none;font-size:12px;font-weight:700;white-space:nowrap;transition:background .2s;font-family:'Space Grotesk',sans-serif;}
+body.dark .wa-link{color:#4ade80;}
+.wa-link:hover{background:rgba(37,211,102,0.18);}
+
+/* TOOL REQUEST FORM */
+.request-section{position:relative;z-index:1;max-width:648px;margin:24px auto 0;padding:0 16px;}
+.request-inner{background:rgba(124,58,237,0.05);border:1px solid rgba(124,58,237,0.18);border-radius:16px;padding:20px;}
+.request-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.request-sub{font-size:12px;color:var(--muted);margin-bottom:14px;}
+.request-row{display:flex;gap:8px;}
+.request-input{flex:1;padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:13px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border-color .2s;}
+.request-input:focus{border-color:#7c3aed;}
+.request-btn{padding:10px 16px;border-radius:10px;border:none;background:linear-gradient(135deg,#7c3aed,#2563eb);color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'Space Grotesk',sans-serif;white-space:nowrap;transition:opacity .2s;}
+.request-btn:hover{opacity:0.88;}
+
+
+
+/* VIP INFO SECTION */
+.vip-section{position:relative;z-index:1;max-width:648px;margin:24px auto 0;padding:0 16px;}
+.vip-inner{background:linear-gradient(135deg,rgba(124,58,237,0.08),rgba(37,99,235,0.05));border:1px solid rgba(124,58,237,0.22);border-radius:16px;padding:20px;}
+.vip-title{font-size:15px;font-weight:700;color:#7c3aed;margin-bottom:6px;}
+.vip-steps{display:flex;flex-direction:column;gap:8px;margin-top:10px;}
+.vip-step{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);}
+.vip-step-num{width:24px;height:24px;border-radius:50%;background:rgba(124,58,237,0.15);color:#7c3aed;font-size:11px;font-weight:700;display:grid;place-items:center;flex-shrink:0;}
+
+/* NEW BADGE (auto within 7 days) */
+.badge-new-tool{background:rgba(239,68,68,0.1);color:#dc2626;border:1px solid rgba(239,68,68,0.25);font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 7px;border-radius:5px;}
+body.dark .badge-new-tool{background:rgba(239,68,68,0.15);color:#f87171;}
+
+/* FAKE DOWNLOAD NOTIFICATIONS */
+#toast-container{position:fixed;bottom:80px;left:16px;z-index:300;display:flex;flex-direction:column;gap:8px;pointer-events:none;}
+.toast{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 14px;box-shadow:0 8px 24px rgba(0,0,0,0.15);font-size:12px;font-weight:600;color:var(--text);min-width:220px;max-width:280px;pointer-events:none;animation:toastIn .4s ease forwards;opacity:0;}
+.toast.hide{animation:toastOut .4s ease forwards;}
+.toast-icon{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-size:18px;flex-shrink:0;}
+.toast-name{font-size:12px;font-weight:700;color:var(--text);line-height:1.3;}
+.toast-sub{font-size:11px;color:var(--muted);font-weight:400;}
+.toast-dot{width:6px;height:6px;border-radius:50%;background:#10b981;box-shadow:0 0 6px #10b981;flex-shrink:0;margin-left:auto;}
+@keyframes toastIn{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes toastOut{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(-20px)}}
 </style>
 </head>
 <body>
+</div>
+
+<button id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 <div class="stars" id="stars"></div>
 
 <nav>
@@ -215,12 +282,12 @@ body.dark .modal{box-shadow:0 20px 60px rgba(0,0,0,0.5);}
   <div class="hero-glow"></div>
   <div class="hero-pill">
     <span class="hero-pill-dot"></span>
-    All tools free to download
+    One Place • All Tools • Unlimited Possibilities
   </div>
   <h1>
     <span class="white">Nu</span> <span class="grad">Tools</span>
   </h1>
-  <p class="hero-sub">Every Nu Tool — downloaded, used, and trusted across the world. Built by Software Support 🛠️.</p>
+  <p class="hero-sub">Premium Tools, Apps &amp; Utilities — All Free to Download. Trusted by users worldwide.</p>
   <div class="hero-stats">
     <div class="hero-stats-row">
       <div class="hero-stat"><span>🧰</span> <b id="heroCount">47</b> tools</div>
@@ -282,6 +349,42 @@ body.dark .modal{box-shadow:0 20px 60px rgba(0,0,0,0.5);}
   </div>
 </div>
 
+<div class="wa-section">
+  <div class="wa-inner">
+    <div class="wa-text">
+      <h3>📢 JOIN OUR WHATSAPP CHANNEL</h3>
+      <p>Get notified when new tools are added — join 2K+ members</p>
+    </div>
+    <a class="wa-link" href="https://whatsapp.com/channel/0029VaBu4kkJuyA3UlC9eg3i" target="_blank">💬 Join Now</a>
+  </div>
+</div>
+
+<div class="request-section">
+  <div class="request-inner">
+    <div class="request-title">🛠️ Request a Tool</div>
+    <div class="request-sub">Can't find what you need? Request it and we'll add it!</div>
+    <div class="request-row">
+      <input class="request-input" id="requestInput" type="text" placeholder="e.g. Spotify Premium APK...">
+      <button class="request-btn" onclick="sendRequest()">Send 📨</button>
+    </div>
+    <div id="requestMsg" style="display:none;margin-top:10px;font-size:12px;font-weight:600;color:#059669;">✅ Request sent! We'll look into it.</div>
+  </div>
+</div>
+
+<div class="vip-section">
+  <div class="vip-inner">
+    <div class="vip-title">💎 How to Get VIP Access</div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:4px;">VIP tools are exclusive files with special access keys. Here's how to get in:</p>
+    <div class="vip-steps">
+      <div class="vip-step"><span class="vip-step-num">1</span> Go to the 💎 VIP category</div>
+      <div class="vip-step"><span class="vip-step-num">2</span> Click on the tool you want</div>
+      <div class="vip-step"><span class="vip-step-num">3</span> Contact admin via email to get your access key</div>
+      <div class="vip-step"><span class="vip-step-num">4</span> Enter the key and download instantly</div>
+    </div>
+    <a href="mailto:nuwamanya.ony@gmail.com?subject=VIP Access Key Request" style="display:inline-flex;align-items:center;gap:6px;margin-top:14px;background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.3);color:#7c3aed;padding:8px 14px;border-radius:8px;text-decoration:none;font-size:12px;font-weight:700;font-family:'Space Grotesk',sans-serif;">📧 Contact Admin for VIP Key</a>
+  </div>
+</div>
+
 <footer>
   <div class="footer-logo">NU <span>TOOLS</span></div>
   <div class="footer-links">
@@ -289,7 +392,7 @@ body.dark .modal{box-shadow:0 20px 60px rgba(0,0,0,0.5);}
     <a href="mailto:nuwamanya.ony@gmail.com">Support</a>
     <a href="https://youtube.com/@software_support?si=CWYwsfXKbVHcXjRT" target="_blank">YouTube</a>
   </div>
-  <div class="footer-copy">© 2026 Software Support 🛠️ — Tools for the world 🌍</div>
+  <div class="footer-copy">© 2026 Software Support 🛠️ — One Platform • Unlimited Tools 🌍</div>
 </footer>
 
 <div class="modal-overlay" id="modal" onclick="closeModal(event)">
@@ -385,8 +488,65 @@ function genStars(){
 genStars();
 document.getElementById('heroCount').textContent=TOOLS.length;
 
+
+
+// BACK TO TOP
+window.addEventListener('scroll',()=>{
+  const btn=document.getElementById('backTop');
+  if(window.scrollY>300){btn.classList.add('show');}
+  else{btn.classList.remove('show');}
+});
+
+// TOOL REQUEST FORM
+function sendRequest(){
+  const val=document.getElementById('requestInput').value.trim();
+  if(!val)return;
+  window.open('mailto:nuwamanya.ony@gmail.com?subject=Tool Request: '+encodeURIComponent(val)+'&body=Hi, I would like to request this tool: '+encodeURIComponent(val),'_blank');
+  document.getElementById('requestInput').value='';
+  const msg=document.getElementById('requestMsg');
+  msg.style.display='block';
+  setTimeout(()=>msg.style.display='none',4000);
+}
+
+
+
+// PWA Install
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt',(e)=>{
+  e.preventDefault();
+  deferredPrompt=e;
+});
+
+// Inline Manifest
+const manifestData = {
+  name: "Nu Tools — Software Support",
+  short_name: "Nu Tools",
+  description: "Premium Tools, Apps & Utilities — All Free to Download",
+  start_url: "/",
+  display: "standalone",
+  background_color: "#06090f",
+  theme_color: "#2563eb",
+  orientation: "portrait",
+  icons: [
+    { src: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==", sizes: "192x192", type: "image/png", purpose: "any maskable" },
+    { src: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==", sizes: "512x512", type: "image/png", purpose: "any maskable" }
+  ]
+};
+const manifestBlob = new Blob([JSON.stringify(manifestData)], {type:'application/json'});
+const manifestURL = URL.createObjectURL(manifestBlob);
+const manifestLink = document.createElement('link');
+manifestLink.rel = 'manifest';
+manifestLink.href = manifestURL;
+document.head.appendChild(manifestLink);
+
+
+
+// Auto NEW badge — tools added within last 7 days get "new" badge
+// We use id >= 55 as "recent" threshold — update this as you add tools
+const RECENT_ID_THRESHOLD = 54;
+
 // View counter — starts from 100, increments on each real visit
-const BASE_VIEWS = 1000;
+const BASE_VIEWS = 6000;
 fetch('https://api.countapi.xyz/hit/nu-tools-hub/visits')
   .then(r => r.json())
   .then(data => {
@@ -444,11 +604,14 @@ function renderTools(){
         </div>
       </div>`;
     }
-    return `<div class="tool-card" style="animation-delay:${delay}s" onclick="openModal(${t.id})">
+    const isNew = t.id > RECENT_ID_THRESHOLD;
+    const badgeLabel = isNew ? 'NEW' : getBadgeLabel(t.badge);
+    const badgeClass = isNew ? 'badge badge-new-tool' : getBadgeClass(t.badge);
+    return `<div class="tool-card" id="tool-${t.id}" style="animation-delay:${delay}s" onclick="openModal(${t.id})">
       <div class="card-glow" style="background:${t.color};"></div>
       <div class="card-top">
         <div class="tool-icon" style="background:${t.color}22;">${t.emoji}</div>
-        <span class="${getBadgeClass(t.badge)}">${getBadgeLabel(t.badge)}</span>
+        <span class="${badgeClass}">${badgeLabel}</span>
       </div>
       <div class="tool-name">${t.name}</div>
       <div class="tool-desc">${t.desc}</div>
@@ -569,6 +732,66 @@ function closeModalBtn(){
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModalBtn();});
 
 renderTools();
+
+// FAKE DOWNLOAD NOTIFICATIONS
+const toastData = [
+  {name:"ZArchiver Premium", emoji:"🗜️", color:"#0891b2"},
+  {name:"MT Manager Premium", emoji:"🛠️", color:"#7c3aed"},
+  {name:"ReVanced Manager", emoji:"🔴", color:"#dc2626"},
+  {name:"Netflix Pro", emoji:"🎬", color:"#dc2626"},
+  {name:"Warp+ VPN", emoji:"🔒", color:"#2563eb"},
+  {name:"Football AI Premium", emoji:"🤖", color:"#2563eb"},
+  {name:"Elite Soccer Tips", emoji:"⚽", color:"#059669"},
+  {name:"Audiomack Premium", emoji:"🎧", color:"#f97316"},
+  {name:"XManager", emoji:"🎼", color:"#1db954"},
+  {name:"Sure Score Premium", emoji:"✅", color:"#10b981"},
+  {name:"APK Editor Premium", emoji:"✏️", color:"#059669"},
+  {name:"Patcher", emoji:"🔧", color:"#f59e0b"},
+  {name:"YouTube Music Mod", emoji:"🎵", color:"#e11d48"},
+  {name:"Score Guru Premium", emoji:"🧙", color:"#a855f7"},
+  {name:"MochiCloner", emoji:"🐾", color:"#a855f7"},
+  {name:"Goalvista Premium", emoji:"🥅", color:"#10b981"},
+  {name:"Predict Pro Premium", emoji:"🔮", color:"#a855f7"},
+  {name:"Rapid Score Premium", emoji:"⚡", color:"#f97316"},
+  {name:"Football Strike 1402KM", emoji:"⚡", color:"#dc2626"},
+  {name:"Betting Tips Premium", emoji:"💰", color:"#eab308"},
+];
+
+const locations = ["🇳🇬 Nigeria","🇬🇭 Ghana","🇰🇪 Kenya","🇿🇦 South Africa","🇺🇬 Uganda","🇹🇿 Tanzania","🇨🇲 Cameroon","🇸🇳 Senegal","🇮🇳 India","🇬🇧 UK","🇺🇸 USA","🇫🇷 France","🇧🇷 Brazil","🇵🇭 Philippines","🇮🇩 Indonesia","🇲🇦 Morocco","🇪🇹 Ethiopia","🇷🇼 Rwanda","🇿🇼 Zimbabwe","🇲🇿 Mozambique"];
+
+function showToast(){
+  const tool = toastData[Math.floor(Math.random()*toastData.length)];
+  const loc = locations[Math.floor(Math.random()*locations.length)];
+  const container = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.innerHTML = `
+    <div class="toast-icon" style="background:${tool.color}22;">${tool.emoji}</div>
+    <div>
+      <div class="toast-name">${tool.name}</div>
+      <div class="toast-sub">⬇️ Downloaded from ${loc}</div>
+    </div>
+    <div class="toast-dot"></div>
+  `;
+  container.appendChild(toast);
+  // Remove after 4 seconds
+  setTimeout(()=>{
+    toast.classList.add('hide');
+    setTimeout(()=>toast.remove(), 400);
+  }, 4000);
+  // Max 1 toast at a time
+  const toasts = container.querySelectorAll('.toast');
+  if(toasts.length > 1) toasts[0].remove();
+}
+
+// Show first toast after 15 seconds, then every 45-90 seconds
+setTimeout(()=>{
+  showToast();
+  setInterval(showToast, Math.random()*45000+45000);
+}, 15000);
+
 </script>
+
+<div id="toast-container"></div>
 </body>
 </html>
