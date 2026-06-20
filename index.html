@@ -312,6 +312,8 @@ body.dark .badge-new-tool{background:rgba(239,68,68,0.15);color:#f87171;}
 .toast-dot{width:6px;height:6px;border-radius:50%;background:#10b981;box-shadow:0 0 6px #10b981;flex-shrink:0;margin-left:auto;}
 @keyframes toastIn{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
 @keyframes toastOut{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(-20px)}}
+
+
 </style>
 </head>
 <body>
@@ -726,13 +728,33 @@ function openModal(id){
   if(t.keyLocked){
     btns.innerHTML=`
       <div style="display:flex;flex-direction:column;gap:10px;">
-        <div style="background:var(--faint);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;">
-          <div style="font-size:22px;margin-bottom:6px;">🔐</div>
-          <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px;">Access Key Required</div>
-          <div style="font-size:11px;color:var(--muted);">Enter your key to unlock this VIP file</div>
+
+        <!-- PRICING NOTICE -->
+        <div style="background:linear-gradient(135deg,rgba(124,58,237,0.08),rgba(37,99,235,0.06));border:1px solid rgba(124,58,237,0.25);border-radius:12px;padding:14px;text-align:center;">
+          <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#7c3aed;margin-bottom:6px;">💎 VIP EXCLUSIVE</div>
+          <div style="font-size:26px;font-weight:900;color:var(--text);font-family:'Orbitron',monospace;margin-bottom:2px;">$10 <span style="font-size:13px;font-weight:500;color:var(--muted);">/ access</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:10px;">One-time payment · Instant access key</div>
+          <div style="display:flex;flex-direction:column;gap:5px;text-align:left;margin-bottom:2px;">
+            <div style="font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px;"><span style="color:#10b981;font-weight:700;">✓</span> Exclusive VIP file access</div>
+            <div style="font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px;"><span style="color:#10b981;font-weight:700;">✓</span> Unique access key sent to you</div>
+            <div style="font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px;"><span style="color:#10b981;font-weight:700;">✓</span> Instant download after payment</div>
+            <div style="font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px;"><span style="color:#10b981;font-weight:700;">✓</span> 24/7 admin support</div>
+          </div>
         </div>
-        <input id="accessKeyInput" type="password" placeholder="Enter access key..." style="width:100%;padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:14px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='#2563eb'" onblur="this.style.borderColor=''" onkeydown="if(event.key==='Enter')checkAccessKey(${t.id})">
-        <div id="keyError" style="display:none;font-size:12px;color:#dc2626;text-align:center;font-weight:600;">❌ Wrong access key. Try again or contact admin.</div>
+
+        <!-- PAYMENT CTA -->
+        <a href="mailto:nuwamanya.ony@gmail.com?subject=VIP Payment — ${encodeURIComponent(t.name)}&body=Hi, I would like to pay $10 for VIP access to: ${encodeURIComponent(t.name)}. Please send me payment details and my access key. Thank you." style="display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 0;border-radius:10px;background:linear-gradient(135deg,#7c3aed,#2563eb);color:#fff;font-size:14px;font-weight:700;text-decoration:none;font-family:'Space Grotesk',sans-serif;box-shadow:0 4px 14px rgba(124,58,237,0.3);transition:opacity .2s;" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">💳 Pay $10 & Get Access</a>
+
+        <!-- DIVIDER -->
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="flex:1;height:1px;background:var(--border);"></div>
+          <span style="font-size:11px;color:var(--muted);font-weight:600;">Already paid?</span>
+          <div style="flex:1;height:1px;background:var(--border);"></div>
+        </div>
+
+        <!-- ACCESS KEY INPUT -->
+        <input id="accessKeyInput" type="password" placeholder="Enter your access key..." style="width:100%;padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:14px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='#7c3aed'" onblur="this.style.borderColor=''" onkeydown="if(event.key==='Enter')checkAccessKey(${t.id})">
+        <div id="keyError" style="display:none;font-size:12px;color:#dc2626;text-align:center;font-weight:600;">❌ Wrong access key. Contact admin for help.</div>
         <button class="dl-btn primary" onclick="checkAccessKey(${t.id})">🔓 Unlock & Download</button>
         <a href="mailto:nuwamanya.ony@gmail.com?subject=VIP Access Key Request — ${encodeURIComponent(t.name)}" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 0;border-radius:10px;border:1px solid var(--border);background:var(--faint);color:var(--muted);font-size:13px;font-weight:700;text-decoration:none;font-family:'Space Grotesk',sans-serif;transition:background .2s;" onmouseover="this.style.background='var(--border)'" onmouseout="this.style.background='var(--faint)'">📧 Contact Admin</a>
       </div>`;
