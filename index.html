@@ -337,6 +337,27 @@ body.dark .pwa-badge{color:#34d399;background:rgba(16,185,129,0.08);}
 .pwa-btn-install{flex:2;padding:12px;border-radius:12px;border:none;background:linear-gradient(135deg,#1d4ed8,#7c3aed);color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'Space Grotesk',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 16px rgba(37,99,235,0.35);transition:opacity .2s,transform .2s;}
 .pwa-btn-install:hover{opacity:0.9;transform:scale(1.02);}
 .pwa-note{font-size:10px;color:var(--muted);margin-top:12px;opacity:0.7;}
+
+/* PRIVACY POLICY PAGE */
+#privacyPage,.privacy-clone-page{display:none;position:fixed;inset:0;background:var(--bg);z-index:600;overflow-y:auto;}
+#privacyPage.show,.privacy-clone-page.show{display:block;}
+.privacy-nav{position:sticky;top:0;z-index:10;background:var(--surface);border-bottom:1px solid var(--border);padding:0 20px;height:62px;display:flex;align-items:center;justify-content:space-between;}
+.privacy-back{color:#2563eb;text-decoration:none;font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;transition:background .2s;background:none;border:none;cursor:pointer;font-family:'Space Grotesk',sans-serif;}
+.privacy-back:hover{background:var(--faint);}
+.privacy-wrap{max-width:720px;margin:0 auto;padding:48px 20px 80px;}
+.privacy-title{font-family:'Orbitron',monospace;font-size:clamp(28px,6vw,40px);font-weight:900;margin-bottom:8px;background:linear-gradient(90deg,#3b82f6,#8b5cf6,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.privacy-updated{font-size:13px;color:var(--muted);margin-bottom:40px;}
+.privacy-section{margin-bottom:32px;}
+.privacy-section h2{font-size:18px;font-weight:700;margin-bottom:12px;color:var(--text);}
+.privacy-section p{font-size:14px;color:var(--muted);margin-bottom:10px;line-height:1.7;}
+.privacy-section ul{margin:10px 0 10px 20px;}
+.privacy-section li{font-size:14px;color:var(--muted);margin-bottom:6px;line-height:1.6;}
+.privacy-highlight{background:var(--faint);border:1px solid var(--border);border-radius:14px;padding:20px;margin:24px 0;}
+.privacy-highlight p{margin-bottom:0;}
+.privacy-contact{background:rgba(37,99,235,0.05);border:1px solid rgba(37,99,235,0.2);border-radius:14px;padding:20px;margin-top:32px;text-align:center;}
+.privacy-contact p{color:var(--muted);font-size:13px;margin-bottom:10px;}
+.privacy-contact-link{display:inline-flex;align-items:center;gap:6px;background:rgba(37,99,235,0.1);border:1px solid rgba(37,99,235,0.4);color:#2563eb;padding:8px 16px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:700;}
+body.dark .privacy-contact-link{color:#60a5fa;}
 </style>
 </head>
 <body>
@@ -472,7 +493,10 @@ body.dark .pwa-badge{color:#34d399;background:rgba(16,185,129,0.08);}
 <footer>
   <div class="footer-logo">NU <span>TOOLS</span></div>
   <div class="footer-links">
-    <a href="#">Privacy</a>
+    <a href="#" onclick="openPage('aboutPage');return false;">About</a>
+    <a href="#" onclick="openPrivacy();return false;">Privacy</a>
+    <a href="#" onclick="openPage('termsPage');return false;">Terms</a>
+    <a href="#" onclick="openPage('dmcaPage');return false;">DMCA</a>
     <a href="mailto:nuwamanya.ony@gmail.com">Support</a>
     <a href="https://youtube.com/@software_support?si=CWYwsfXKbVHcXjRT" target="_blank">YouTube</a>
   </div>
@@ -954,6 +978,30 @@ if(pwaDismissed && pwaDismissed !== '1' && Date.now() > parseInt(pwaDismissed)){
   localStorage.removeItem('pwa-dismissed');
 }
 
+
+
+// PRIVACY POLICY PAGE
+function openPrivacy(){
+  document.getElementById('privacyPage').classList.add('show');
+  document.body.style.overflow='hidden';
+  window.scrollTo(0,0);
+}
+function closePrivacy(){
+  document.getElementById('privacyPage').classList.remove('show');
+  document.body.style.overflow='';
+}
+
+// GENERIC PAGE OPEN/CLOSE (About, Terms, DMCA)
+function openPage(id){
+  document.getElementById(id).classList.add('show');
+  document.body.style.overflow='hidden';
+  window.scrollTo(0,0);
+}
+function closePage(id){
+  document.getElementById(id).classList.remove('show');
+  document.body.style.overflow='';
+}
+
 </script>
 
 <div id="toast-container"></div>
@@ -978,6 +1026,229 @@ if(pwaDismissed && pwaDismissed !== '1' && Date.now() > parseInt(pwaDismissed)){
       <button class="pwa-btn-install" onclick="installPWA()">⬇️ Install Now</button>
     </div>
     <div class="pwa-note">No storage required · Works on Android & iOS</div>
+  </div>
+</div>
+
+<!-- PRIVACY POLICY PAGE -->
+<div id="privacyPage">
+  <nav class="privacy-nav">
+    <div class="nav-name">Nu <span>Tools</span></div>
+    <button class="privacy-back" onclick="closePrivacy()">← Back to Tools</button>
+  </nav>
+  <div class="privacy-wrap">
+    <h1 class="privacy-title">Privacy Policy</h1>
+    <p class="privacy-updated">Last updated: July 2026</p>
+
+    <div class="privacy-section">
+      <h2>👋 Overview</h2>
+      <p>Nu Tools ("we", "our", "us") operates the website nu-tools.vercel.app. This page explains what information we collect when you visit our site, how we use it, and the choices available to you.</p>
+    </div>
+
+    <div class="privacy-section">
+      <h2>📊 Information We Collect</h2>
+      <p>We collect limited, non-personal information to operate and improve the site:</p>
+      <ul>
+        <li><strong>Usage data</strong> — pages visited, tools viewed, and general site interactions (via anonymous view counters)</li>
+        <li><strong>Device information</strong> — browser type, device type, and approximate location (country-level, via standard web analytics)</li>
+        <li><strong>Contact information</strong> — only when you voluntarily email us or submit a tool request</li>
+      </ul>
+      <p>We do not require account creation, and we do not collect names, phone numbers, or payment details directly through the site.</p>
+    </div>
+
+    <div class="privacy-section">
+      <h2>🍪 Cookies &amp; Local Storage</h2>
+      <p>Our site uses local browser storage to remember your preferences, such as light/dark mode. This data stays on your device and is never sent to our servers.</p>
+    </div>
+
+    <div class="privacy-section">
+      <h2>📢 Advertising</h2>
+      <p>We may display third-party advertisements on this site through ad networks. These networks may use cookies or similar technologies to serve relevant ads. We do not control the data collection practices of third-party ad networks — please refer to their respective privacy policies for details.</p>
+    </div>
+
+    <div class="privacy-section">
+      <h2>🔗 Third-Party Downloads</h2>
+      <div class="privacy-highlight">
+        <p>Tool downloads on Nu Tools are hosted on third-party platforms. We are not responsible for the privacy practices, security, or content of external download sites. Always use caution when downloading files from the internet.</p>
+      </div>
+    </div>
+
+    <div class="privacy-section">
+      <h2>💎 VIP Access &amp; Payments</h2>
+      <p>VIP tool access requires direct contact via email. Any payment arrangements are handled privately between you and the site admin. We do not store payment card details on our servers.</p>
+    </div>
+
+    <div class="privacy-section">
+      <h2>🔒 Data Security</h2>
+      <p>We take reasonable measures to protect any information shared with us. However, no method of transmission over the internet is 100% secure, and we cannot guarantee absolute security.</p>
+    </div>
+
+    <div class="privacy-section">
+      <h2>👶 Children's Privacy</h2>
+      <p>Our site is not directed at children under 13. We do not knowingly collect personal information from children.</p>
+    </div>
+
+    <div class="privacy-section">
+      <h2>🔄 Changes to This Policy</h2>
+      <p>We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated revision date.</p>
+    </div>
+
+    <div class="privacy-contact">
+      <p>Questions about this Privacy Policy?</p>
+      <a class="privacy-contact-link" href="mailto:nuwamanya.ony@gmail.com">📧 Contact Us</a>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT US PAGE -->
+<div id="aboutPage" class="privacy-clone-page">
+  <nav class="privacy-nav">
+    <div class="nav-name">Nu <span>Tools</span></div>
+    <button class="privacy-back" onclick="closePage('aboutPage')">← Back to Tools</button>
+  </nav>
+  <div class="privacy-wrap">
+    <h1 class="privacy-title">About Nu Tools</h1>
+    <p class="privacy-updated">Software Support 🛠️ — Your Trusted Tool Hub</p>
+
+    <div class="privacy-section">
+      <h2>👋 Who We Are</h2>
+      <p>Nu Tools is run by Software Support, a solo tech creator sharing free tools, apps, and utilities with a global audience. What started as a small YouTube and WhatsApp channel has grown into a complete platform trusted by thousands of users worldwide.</p>
+    </div>
+
+    <div class="privacy-section">
+      <h2>🎯 Our Mission</h2>
+      <p>We believe useful software tools shouldn't be locked behind confusing app stores or paywalls. Nu Tools brings together premium utilities, file managers, mods, and curated tips in one clean, easy-to-navigate hub — free for everyone.</p>
+    </div>
+
+    <div class="privacy-section">
+      <h2>🧰 What We Offer</h2>
+      <ul>
+        <li><strong>File &amp; Utility Tools</strong> — archive managers, APK editors, and system utilities</li>
+        <li><strong>Apps &amp; Mods</strong> — enhanced versions of popular apps</li>
+        <li><strong>Betting &amp; Tips</strong> — curated sports predictions and analysis tools</li>
+        <li><strong>VIP Exclusive Files</strong> — premium content for dedicated members</li>
+      </ul>
+    </div>
+
+    <div class="privacy-section">
+      <h2>🌍 Our Community</h2>
+      <p>Beyond the website, we run an active WhatsApp channel with thousands of members who get first access to new tools, updates, and exclusive drops. We also share tutorials and tips on our YouTube channel, @software_support.</p>
+    </div>
+
+    <div class="privacy-contact">
+      <p>Want to connect or suggest a tool?</p>
+      <a class="privacy-contact-link" href="mailto:nuwamanya.ony@gmail.com">📧 Get in Touch</a>
+    </div>
+  </div>
+</div>
+
+<!-- TERMS OF SERVICE PAGE -->
+<div id="termsPage" class="privacy-clone-page">
+  <nav class="privacy-nav">
+    <div class="nav-name">Nu <span>Tools</span></div>
+    <button class="privacy-back" onclick="closePage('termsPage')">← Back to Tools</button>
+  </nav>
+  <div class="privacy-wrap">
+    <h1 class="privacy-title">Terms of Service</h1>
+    <p class="privacy-updated">Last updated: July 2026</p>
+
+    <div class="privacy-section">
+      <h2>📜 Acceptance of Terms</h2>
+      <p>By accessing and using Nu Tools (nu-tools.vercel.app), you agree to be bound by these Terms of Service. If you do not agree, please do not use this site.</p>
+    </div>
+
+    <div class="privacy-section">
+      <h2>🧰 Use of Tools &amp; Downloads</h2>
+      <p>All tools listed on Nu Tools are provided "as is" for personal, non-commercial use. We do not guarantee that every download link will always be available or free of third-party redirect pages.</p>
+      <ul>
+        <li>You are responsible for verifying the safety of any file before installing it</li>
+        <li>Tools are provided by third-party sources; we do not host or claim ownership of all files</li>
+        <li>Use of modified apps may violate the original app's Terms of Service — use at your own discretion</li>
+      </ul>
+    </div>
+
+    <div class="privacy-section">
+      <h2>💎 VIP Access</h2>
+      <p>VIP tools require payment and an access key obtained directly from the site admin. Payments are non-refundable once an access key has been issued, except in cases of technical failure preventing download.</p>
+    </div>
+
+    <div class="privacy-section">
+      <h2>🚫 Prohibited Use</h2>
+      <p>You agree not to:</p>
+      <ul>
+        <li>Redistribute VIP access keys or paid content without authorization</li>
+        <li>Use the site for any unlawful purpose</li>
+        <li>Attempt to disrupt, hack, or exploit the website</li>
+      </ul>
+    </div>
+
+    <div class="privacy-section">
+      <h2>⚠️ Disclaimer</h2>
+      <div class="privacy-highlight">
+        <p>Nu Tools is not responsible for any damage, data loss, or issues arising from the use of downloaded tools. All software is used at your own risk.</p>
+      </div>
+    </div>
+
+    <div class="privacy-section">
+      <h2>🔄 Changes to Terms</h2>
+      <p>We reserve the right to update these Terms at any time. Continued use of the site after changes constitutes acceptance of the new Terms.</p>
+    </div>
+
+    <div class="privacy-contact">
+      <p>Questions about these Terms?</p>
+      <a class="privacy-contact-link" href="mailto:nuwamanya.ony@gmail.com">📧 Contact Us</a>
+    </div>
+  </div>
+</div>
+
+<!-- DMCA / COPYRIGHT POLICY PAGE -->
+<div id="dmcaPage" class="privacy-clone-page">
+  <nav class="privacy-nav">
+    <div class="nav-name">Nu <span>Tools</span></div>
+    <button class="privacy-back" onclick="closePage('dmcaPage')">← Back to Tools</button>
+  </nav>
+  <div class="privacy-wrap">
+    <h1 class="privacy-title">DMCA &amp; Copyright Policy</h1>
+    <p class="privacy-updated">Last updated: July 2026</p>
+
+    <div class="privacy-section">
+      <h2>©️ Copyright Respect</h2>
+      <p>Nu Tools respects the intellectual property rights of others. We do not knowingly host or link to content that infringes on valid copyrights, and we take copyright claims seriously.</p>
+    </div>
+
+    <div class="privacy-section">
+      <h2>📩 Filing a DMCA Complaint</h2>
+      <p>If you believe content on Nu Tools infringes your copyright, please send a notice including:</p>
+      <ul>
+        <li>Identification of the copyrighted work claimed to be infringed</li>
+        <li>The specific URL or tool name on our site allegedly infringing</li>
+        <li>Your contact information (name and email)</li>
+        <li>A statement that you have a good-faith belief the use is unauthorized</li>
+        <li>A statement, under penalty of perjury, that the information is accurate</li>
+      </ul>
+      <div class="privacy-highlight">
+        <p>Send DMCA notices to: <strong>nuwamanya.ony@gmail.com</strong> with subject line "DMCA Takedown Request"</p>
+      </div>
+    </div>
+
+    <div class="privacy-section">
+      <h2>⏱️ Response Time</h2>
+      <p>Upon receiving a valid DMCA notice, we will review and, if warranted, remove or disable access to the reported content within a reasonable timeframe.</p>
+    </div>
+
+    <div class="privacy-section">
+      <h2>🔁 Counter-Notice</h2>
+      <p>If you believe your content was removed in error, you may submit a counter-notice explaining why the content does not infringe. We will review and respond accordingly.</p>
+    </div>
+
+    <div class="privacy-section">
+      <h2>🛠️ Third-Party Tools</h2>
+      <p>Some tools on our site are user-submitted or sourced from third-party platforms. We are not the original developer of most listed tools and act only as a directory/hub linking to external sources.</p>
+    </div>
+
+    <div class="privacy-contact">
+      <p>Have a copyright concern?</p>
+      <a class="privacy-contact-link" href="mailto:nuwamanya.ony@gmail.com">📧 Report an Issue</a>
+    </div>
   </div>
 </div>
 </body>
