@@ -625,23 +625,30 @@ document.head.appendChild(manifestLink);
 
 
 
-// Auto NEW badge — tools added within last 7 days get "new" badge
-// We use id >= 55 as "recent" threshold — update this as you add tools
-const RECENT_ID_THRESHOLD = 54;
+// Auto NEW badge — tools get "new" badge for 14 days after their dateAdded
+const NEW_BADGE_DAYS = 14;
+const SITE_LAUNCH_DATE = new Date('2026-06-11'); // reference date for tools without explicit dateAdded
 
-// View counter — starts from 100, increments on each real visit
+// View counter — starts from 6000, increments on each real visit
 const BASE_VIEWS = 6000;
+
+function formatViews(n){
+  if(n >= 1000000) return (n/1000000).toFixed(n%1000000===0?0:1).replace(/\.0$/,'')+'M';
+  if(n >= 1000) return (n/1000).toFixed(n%1000===0?0:1).replace(/\.0$/,'')+'k';
+  return n.toString();
+}
+
 fetch('https://api.countapi.xyz/hit/nu-tools-hub/visits')
   .then(r => r.json())
   .then(data => {
     const total = (data.value || 1) + BASE_VIEWS;
-    document.getElementById('viewCount').textContent = total.toLocaleString();
+    document.getElementById('viewCount').textContent = formatViews(total);
   })
   .catch(() => {
     // Fallback if API is unavailable
     const stored = parseInt(localStorage.getItem('nu_views') || '0') + 1;
     localStorage.setItem('nu_views', stored);
-    document.getElementById('viewCount').textContent = (stored + BASE_VIEWS).toLocaleString();
+    document.getElementById('viewCount').textContent = formatViews(stored + BASE_VIEWS);
   });
 
 function toggleTheme(){
@@ -649,13 +656,53 @@ function toggleTheme(){
   document.getElementById('themeToggle').textContent=isDark?'☀️ Light':'🌙 Dark';
   localStorage.setItem('theme',isDark?'dark':'light');
 }
-if(localStorage.getItem('theme')==='dark'){
+// Use saved preference if set, otherwise detect system preference
+const savedTheme = localStorage.getItem('theme');
+if(savedTheme === 'dark' || (!savedTheme && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)){
   document.body.classList.add('dark');
   document.getElementById('themeToggle').textContent='☀️ Light';
 }
 
 function getBadgeClass(b){return b?`badge badge-${b}`:'badge badge-free';}
 function getBadgeLabel(b){return b?b.toUpperCase():'FREE';}
+
+function buildCard(t,delay){
+  if(t.featured){
+    return `<div class="tool-card featured" style="animation-delay:${delay}s" onclick="openModal(${t.id})">
+      <div class="card-top">
+        <div class="tool-icon" style="background:${t.color}22;">${t.emoji}</div>
+        <span class="${getBadgeClass(t.badge)}">${getBadgeLabel(t.badge)}</span>
+      </div>
+      <div class="featured-body">
+        <div class="tool-name">${t.name}</div>
+        <div class="tool-desc">${t.desc}</div>
+      </div>
+      <div class="featured-actions">
+        <button class="dl-btn primary" onclick="event.stopPropagation();handleDl(${t.id})">⬇️ Download</button>
+        ${t.previewUrl?`<button class="dl-btn outline" onclick="event.stopPropagation();">👁️ Preview</button>`:''}
+      </div>
+    </div>`;
+  }
+  const daysSinceLaunch = Math.floor((Date.now() - SITE_LAUNCH_DATE) / 86400000);
+  const isNew = t.dateAdded
+    ? (Date.now() - new Date(t.dateAdded)) / 86400000 <= NEW_BADGE_DAYS
+    : (t.id > TOOLS.length - 3 && daysSinceLaunch <= NEW_BADGE_DAYS);
+  const badgeLabel = isNew ? 'NEW' : getBadgeLabel(t.badge);
+  const badgeClass = isNew ? 'badge badge-new-tool' : getBadgeClass(t.badge);
+  return `<div class="tool-card" id="tool-${t.id}" style="animation-delay:${delay}s" onclick="openModal(${t.id})">
+    <div class="card-glow" style="background:${t.color};"></div>
+    <div class="card-top">
+      <div class="tool-icon" style="background:${t.color}22;">${t.emoji}</div>
+      <span class="${badgeClass}">${badgeLabel}</span>
+    </div>
+    <div class="tool-name">${t.name}</div>
+    <div class="tool-desc">${t.desc}</div>
+    <div class="tool-meta">${t.size} · ${t.version}</div>
+    <button class="dl-btn ${t.keyLocked?'outline':t.locked?'locked':'primary'}" onclick="event.stopPropagation();openModal(${t.id})">
+      ${t.keyLocked?'🔐 VIP — Enter Key':t.locked?'🔒 VIP Only':'⬇️ Download'}
+    </button>
+  </div>`;
+}
 
 function renderTools(){
   const grid=document.getElementById('toolGrid');
@@ -670,41 +717,7 @@ function renderTools(){
     grid.innerHTML=`<div class="empty"><div class="empty-icon">🔍</div><div class="empty-title">No tools found</div><div class="empty-sub">Try a different search or category</div></div>`;
     return;
   }
-  grid.innerHTML=visible.map((t,i)=>{
-    const delay=(i*0.07).toFixed(2);
-    if(t.featured){
-      return `<div class="tool-card featured" style="animation-delay:${delay}s" onclick="openModal(${t.id})">
-        <div class="card-top">
-          <div class="tool-icon" style="background:${t.color}22;">${t.emoji}</div>
-          <span class="${getBadgeClass(t.badge)}">${getBadgeLabel(t.badge)}</span>
-        </div>
-        <div class="featured-body">
-          <div class="tool-name">${t.name}</div>
-          <div class="tool-desc">${t.desc}</div>
-        </div>
-        <div class="featured-actions">
-          <button class="dl-btn primary" onclick="event.stopPropagation();handleDl(${t.id})">⬇️ Download</button>
-          ${t.previewUrl?`<button class="dl-btn outline" onclick="event.stopPropagation();">👁️ Preview</button>`:''}
-        </div>
-      </div>`;
-    }
-    const isNew = t.id > RECENT_ID_THRESHOLD;
-    const badgeLabel = isNew ? 'NEW' : getBadgeLabel(t.badge);
-    const badgeClass = isNew ? 'badge badge-new-tool' : getBadgeClass(t.badge);
-    return `<div class="tool-card" id="tool-${t.id}" style="animation-delay:${delay}s" onclick="openModal(${t.id})">
-      <div class="card-glow" style="background:${t.color};"></div>
-      <div class="card-top">
-        <div class="tool-icon" style="background:${t.color}22;">${t.emoji}</div>
-        <span class="${badgeClass}">${badgeLabel}</span>
-      </div>
-      <div class="tool-name">${t.name}</div>
-      <div class="tool-desc">${t.desc}</div>
-      <div class="tool-meta">${t.size} · ${t.version}</div>
-      <button class="dl-btn ${t.keyLocked?'outline':t.locked?'locked':'primary'}" onclick="event.stopPropagation();openModal(${t.id})">
-        ${t.keyLocked?'🔐 VIP — Enter Key':t.locked?'🔒 VIP Only':'⬇️ Download'}
-      </button>
-    </div>`;
-  }).join('');
+  grid.innerHTML=visible.map((t,i)=>buildCard(t,(i*0.07).toFixed(2))).join('');
 }
 
 function filterCat(cat,el){
@@ -833,9 +846,9 @@ function closeModalBtn(){
   document.body.style.overflow='';
 }
 
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModalBtn();});
-
 renderTools();
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModalBtn();});
 
 // FAKE DOWNLOAD NOTIFICATIONS
 const toastData = [
