@@ -808,13 +808,40 @@ function openModal(id){
           <div style="font-size:10px;color:var(--muted);line-height:1.6;">✓ VIP file access &nbsp;·&nbsp; ✓ Unique key &nbsp;·&nbsp; ✓ Instant download &nbsp;·&nbsp; ✓ 24/7 support</div>
         </div>
 
-        <!-- PAYMENT CTA -->
-        <a href="mailto:nuwamanya.ony@gmail.com?subject=VIP Payment — ${encodeURIComponent(t.name)}&body=Hi, I would like to pay $${price} for VIP access to: ${encodeURIComponent(t.name)}. Please send me payment details and my access key. Thank you." style="display:flex;align-items:center;justify-content:center;gap:8px;padding:9px 0;border-radius:10px;background:linear-gradient(135deg,#7c3aed,#2563eb);color:#fff;font-size:13px;font-weight:700;text-decoration:none;font-family:'Space Grotesk',sans-serif;box-shadow:0 4px 14px rgba(124,58,237,0.3);transition:opacity .2s;" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">💳 Pay $${price} & Get Access</a>
+        <!-- STEP 1 DIVIDER -->
+        <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
+          <div style="flex:1;height:1px;background:var(--border);"></div>
+          <span style="font-size:10px;color:var(--muted);font-weight:600;">Step 1</span>
+          <div style="flex:1;height:1px;background:var(--border);"></div>
+        </div>
+        <div style="font-size:11px;font-weight:700;color:var(--text);text-align:center;">Send payment to any of these:</div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          ${PAYMENT_METHODS.map(m=>`
+          <div class="pay-method" onclick="copyAddress(this)" data-address="${m.address}" style="cursor:pointer;background:var(--faint);border:1px solid var(--border);border-radius:10px;padding:9px 12px;transition:border-color .2s;">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <span style="font-size:12px;font-weight:700;color:var(--text);">${m.icon} ${m.label}</span>
+              <span class="pay-copy-icon" style="font-size:10px;font-weight:700;color:#7c3aed;">📋 Copy</span>
+            </div>
+            <div style="font-size:10.5px;color:var(--muted);word-break:break-all;margin-top:3px;font-family:monospace;">${m.address}</div>
+          </div>`).join('')}
+        </div>
+        <div style="font-size:10px;color:var(--muted);text-align:center;">Send the USD equivalent of $${price} in your chosen crypto. Double-check the network before sending — wrong network can lose funds.</div>
+
+        <!-- DIVIDER -->
+        <div style="display:flex;align-items:center;gap:8px;margin-top:2px;">
+          <div style="flex:1;height:1px;background:var(--border);"></div>
+          <span style="font-size:10px;color:var(--muted);font-weight:600;">Step 2</span>
+          <div style="flex:1;height:1px;background:var(--border);"></div>
+        </div>
+
+        <!-- EMAIL PROOF CTA -->
+        <a href="mailto:nuwamanya.ony@gmail.com?subject=VIP Payment Proof — ${encodeURIComponent(t.name)}&body=Hi, I just paid $${price} for VIP access to: ${encodeURIComponent(t.name)}.%0D%0A%0D%0APayment method used: [ETH / TRC20 / Binance ID]%0D%0ATransaction ID / reference: [paste here]%0D%0A%0D%0APlease attach your payment screenshot before sending. I'll reply with your access key as soon as I verify it." style="display:flex;align-items:center;justify-content:center;gap:8px;padding:9px 0;border-radius:10px;background:linear-gradient(135deg,#7c3aed,#2563eb);color:#fff;font-size:13px;font-weight:700;text-decoration:none;font-family:'Space Grotesk',sans-serif;box-shadow:0 4px 14px rgba(124,58,237,0.3);transition:opacity .2s;" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">📧 Submit Payment Confirmation</a>
+        <div style="font-size:10px;color:var(--muted);text-align:center;">Attach a screenshot + transaction ID. Your key will be sent in a moment.</div>
 
         <!-- DIVIDER -->
         <div style="display:flex;align-items:center;gap:8px;">
           <div style="flex:1;height:1px;background:var(--border);"></div>
-          <span style="font-size:10px;color:var(--muted);font-weight:600;">Already paid?</span>
+          <span style="font-size:10px;color:var(--muted);font-weight:600;">Already have a key?</span>
           <div style="flex:1;height:1px;background:var(--border);"></div>
         </div>
 
@@ -822,7 +849,6 @@ function openModal(id){
         <input id="accessKeyInput" type="password" placeholder="Enter your access key..." style="width:100%;padding:8px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:13px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='#7c3aed'" onblur="this.style.borderColor=''" onkeydown="if(event.key==='Enter')checkAccessKey(${t.id})">
         <div id="keyError" style="display:none;font-size:11px;color:#dc2626;text-align:center;font-weight:600;">❌ Wrong access key. Contact admin for help.</div>
         <button class="dl-btn primary" style="padding:9px 0;" onclick="checkAccessKey(${t.id})">🔓 Unlock & Download</button>
-        <a href="mailto:nuwamanya.ony@gmail.com?subject=VIP Access Key Request — ${encodeURIComponent(t.name)}" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:7px 0;border-radius:10px;border:1px solid var(--border);background:var(--faint);color:var(--muted);font-size:12px;font-weight:700;text-decoration:none;font-family:'Space Grotesk',sans-serif;transition:background .2s;" onmouseover="this.style.background='var(--border)'" onmouseout="this.style.background='var(--faint)'">📧 Contact Admin</a>
       </div>`;
   } else if(t.locked){
     btns.innerHTML=`<button class="dl-btn locked">🔒 VIP Only</button>`;
@@ -832,6 +858,28 @@ function openModal(id){
   }
   document.getElementById('modal').classList.add('open');
   document.body.style.overflow='hidden';
+}
+
+// Crypto payment options shown in the VIP modal. Addresses are provided by
+// the site owner — verify these are correct before relying on them.
+const PAYMENT_METHODS = [
+  {label:"ETH", icon:"🔷", address:"0x0757e76d2347bc274722b11813547bb7260fa475"},
+  {label:"USDT (TRC20)", icon:"🟢", address:"TJepvn5oW5b4HDtGYvwnxv5aFBUq7dYkgT"},
+  {label:"Binance ID", icon:"🟡", address:"1238482353"}
+];
+
+function copyAddress(el){
+  const addr = el.dataset.address;
+  navigator.clipboard.writeText(addr).then(()=>{
+    const icon = el.querySelector('.pay-copy-icon');
+    const original = icon.textContent;
+    icon.textContent = '✅ Copied';
+    el.style.borderColor = '#10b981';
+    setTimeout(()=>{ icon.textContent = original; el.style.borderColor=''; }, 1500);
+  }).catch(()=>{
+    // Fallback for browsers without clipboard API permission
+    alert('Address: ' + addr);
+  });
 }
 
 // NOTE: This client-side key check is a convenience gate, not real security —
