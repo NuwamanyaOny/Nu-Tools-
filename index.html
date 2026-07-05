@@ -175,10 +175,10 @@ footer{position:relative;z-index:1;margin-top:48px;border-top:1px solid var(--bo
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:500;display:grid;place-items:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .2s;}
 body.dark .modal-overlay{background:rgba(0,0,0,0.75);}
 .modal-overlay.open{opacity:1;pointer-events:all;}
-.modal{background:var(--surface);border:1px solid var(--border2);border-radius:22px;padding:28px 24px;width:100%;max-width:360px;transform:translateY(12px);transition:transform .25s ease;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.15);}
+.modal{background:var(--surface);border:1px solid var(--border2);border-radius:22px;padding:22px 20px;width:100%;max-width:360px;max-height:92vh;overflow-y:auto;transform:translateY(12px);transition:transform .25s ease;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.15);}
 body.dark .modal{box-shadow:0 20px 60px rgba(0,0,0,0.5);}
 .modal-overlay.open .modal{transform:translateY(0);}
-.modal-head{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+.modal-head{display:flex;align-items:center;gap:14px;margin-bottom:10px;}
 .modal-icon{width:58px;height:58px;border-radius:16px;display:grid;place-items:center;font-size:28px;flex-shrink:0;}
 .modal-name{font-size:17px;font-weight:700;color:var(--text);}
 .modal-cat{font-size:12px;color:var(--muted);margin-top:2px;}
@@ -596,9 +596,9 @@ const TOOLS=[
   {id:51,name:"Huge Sports Tips",emoji:"💪",color:"#f97316",category:"betting",badge:"free",desc:"Massive daily sports tips bundle. Football, basketball, tennis and more.",longDesc:"Huge Sports Tips Premium covers a wide range of sports every day. Get a large volume of curated tips with match analysis across football and other major sports.",size:"—",version:"Premium",type:"APK",downloadUrl:"https://shrinkme.click/Huge",previewUrl:null,locked:false},
   {id:52,name:"Predict Pro Premium",emoji:"🔮",color:"#a855f7",category:"betting",badge:"free",desc:"Pro-level match predictions with confidence scores and detailed analysis.",longDesc:"Predict Pro Premium delivers professional match predictions with confidence ratings, form analysis, and expert commentary for football bettors.",size:"—",version:"Premium",type:"APK",downloadUrl:"https://shrinkme.click/Predt",previewUrl:null,locked:false},
   {id:53,name:"DATips Premium",emoji:"📉",color:"#10b981",category:"betting",badge:"free",desc:"Data-driven football tips. Analytics-first approach to sports predictions.",longDesc:"DATips Premium takes a data-first approach to football predictions. Every tip is backed by statistical models, team form, and head-to-head data.",size:"—",version:"Premium",type:"APK",downloadUrl:"https://shrinkme.click/Datips",previewUrl:null,locked:false},
-  {id:54,name:"Betting Tips Premium",emoji:"💰",color:"#eab308",category:"betting",badge:"free",desc:"Comprehensive premium betting tips for football and sports markets.",longDesc:"Betting Tips Premium gives you a broad set of daily tips across football and other sports markets. Simple interface, reliable picks, and daily updates.",size:"—",version:"Premium",type:"APK",downloadUrl:"https://shrinkme.click/BTips",previewUrl:null,locked:false},
-  {id:55,name:"Fixed Correct Score",emoji:"🔐",color:"#f59e0b",category:"vip",badge:"vip",desc:"Exclusive VIP fixed correct score file. Access key required to download.",longDesc:"This is an exclusive VIP-only fixed correct score file. Only authorised users with an access key can download this file. Contact admin to get your access key.",size:"—",version:"2026",type:"File",downloadUrl:"https://devuploads.com/sb2wqa70ru97",previewUrl:null,locked:true,keyLocked:true}
+  {id:54,name:"Betting Tips Premium",emoji:"💰",color:"#eab308",category:"betting",badge:"free",desc:"Comprehensive premium betting tips for football and sports markets.",longDesc:"Betting Tips Premium gives you a broad set of daily tips across football and other sports markets. Simple interface, reliable picks, and daily updates.",size:"—",version:"Premium",type:"APK",downloadUrl:"https://shrinkme.click/BTips",previewUrl:null,locked:false}
   ,{id:56,name:"Football Strike 1402KM",emoji:"⚡",color:"#dc2626",category:"gaming",badge:"hot",desc:"Football Strike speed hack — 1402 KM/H edition. Download and dominate.",longDesc:"Football Strike 1402KM/H speed hack. Install and enjoy ultra-fast shots on Football Strike. Free to download.",size:"—",version:"1402KMH",type:"APK",downloadUrl:"https://shrinkme.click/1402KM",previewUrl:null,locked:false}
+  ,{id:57,name:"Fixed Match Analyzer — For Smart Bettors",emoji:"⚽",color:"#0f5132",category:"vip",badge:"vip",desc:"Exclusive VIP fixed match analysis tool. Access key required to download.",longDesc:"Fixed Match Analyzer gives smart bettors deep analytical insight into fixed match data. Only authorised users with an access key can download this file. Contact admin to get your access key.",size:"—",version:"2026",type:"File",downloadUrl:"https://devuploads.com/nsdkf8cvr44g",previewUrl:null,locked:true,keyLocked:true,price:15}
 ];
 
 let currentCat='all', currentSearch='';
@@ -740,6 +740,7 @@ function buildCard(t,delay){
       <span class="${badgeClass}">${badgeLabel}</span>
     </div>
     <div class="tool-name">${t.name}</div>
+    ${t.keyLocked?`<div style="font-size:10px;color:#7c3aed;font-weight:700;letter-spacing:0.3px;margin-top:-4px;">💳 One-time payment</div>`:''}
     <div class="tool-desc">${t.desc}</div>
     <div class="tool-meta">${t.size} · ${t.version}</div>
     <button class="dl-btn ${t.keyLocked?'outline':t.locked?'locked':'primary'}" onclick="event.stopPropagation();openModal(${t.id})">
@@ -801,43 +802,48 @@ function openModal(id){
   document.getElementById('mIcon').style.background=t.color+'22';
   document.getElementById('mName').textContent=t.name;
   document.getElementById('mCat').textContent=t.category.charAt(0).toUpperCase()+t.category.slice(1)+' · '+t.type;
-  document.getElementById('mDesc').textContent=t.longDesc;
-  document.getElementById('mSize').textContent=t.size;
-  document.getElementById('mVer').textContent=t.version;
-  document.getElementById('mType').textContent=t.type;
+  const descEl = document.getElementById('mDesc');
+  const metaEl = document.querySelector('.modal-meta');
+  if(t.keyLocked){
+    descEl.style.display='none';
+    metaEl.style.display='none';
+  } else {
+    descEl.style.display='block';
+    metaEl.style.display='flex';
+    descEl.textContent=t.longDesc;
+    document.getElementById('mSize').textContent=t.size;
+    document.getElementById('mVer').textContent=t.version;
+    document.getElementById('mType').textContent=t.type;
+  }
   const btns=document.getElementById('mBtns');
   if(t.keyLocked){
+    const price = t.price || 10;
     btns.innerHTML=`
-      <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="display:flex;flex-direction:column;gap:6px;">
 
         <!-- PRICING NOTICE -->
-        <div style="background:linear-gradient(135deg,rgba(124,58,237,0.08),rgba(37,99,235,0.06));border:1px solid rgba(124,58,237,0.25);border-radius:12px;padding:14px;text-align:center;">
-          <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#7c3aed;margin-bottom:6px;">💎 VIP EXCLUSIVE</div>
-          <div style="font-size:26px;font-weight:900;color:var(--text);font-family:'Orbitron',monospace;margin-bottom:2px;">$10 <span style="font-size:13px;font-weight:500;color:var(--muted);">/ access</span></div>
-          <div style="font-size:11px;color:var(--muted);margin-bottom:10px;">One-time payment · Instant access key</div>
-          <div style="display:flex;flex-direction:column;gap:5px;text-align:left;margin-bottom:2px;">
-            <div style="font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px;"><span style="color:#10b981;font-weight:700;">✓</span> Exclusive VIP file access</div>
-            <div style="font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px;"><span style="color:#10b981;font-weight:700;">✓</span> Unique access key sent to you</div>
-            <div style="font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px;"><span style="color:#10b981;font-weight:700;">✓</span> Instant download after payment</div>
-            <div style="font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px;"><span style="color:#10b981;font-weight:700;">✓</span> 24/7 admin support</div>
-          </div>
+        <div style="background:linear-gradient(135deg,rgba(124,58,237,0.08),rgba(37,99,235,0.06));border:1px solid rgba(124,58,237,0.25);border-radius:12px;padding:12px;text-align:center;">
+          <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7c3aed;margin-bottom:4px;">💎 VIP EXCLUSIVE</div>
+          <div style="font-size:24px;font-weight:900;color:var(--text);font-family:'Orbitron',monospace;margin-bottom:2px;">$${price}</div>
+          <div style="font-size:10px;color:var(--muted);margin-bottom:8px;">One-time payment · Instant access key</div>
+          <div style="font-size:10px;color:var(--muted);line-height:1.6;">✓ VIP file access &nbsp;·&nbsp; ✓ Unique key &nbsp;·&nbsp; ✓ Instant download &nbsp;·&nbsp; ✓ 24/7 support</div>
         </div>
 
         <!-- PAYMENT CTA -->
-        <a href="mailto:nuwamanya.ony@gmail.com?subject=VIP Payment — ${encodeURIComponent(t.name)}&body=Hi, I would like to pay $10 for VIP access to: ${encodeURIComponent(t.name)}. Please send me payment details and my access key. Thank you." style="display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 0;border-radius:10px;background:linear-gradient(135deg,#7c3aed,#2563eb);color:#fff;font-size:14px;font-weight:700;text-decoration:none;font-family:'Space Grotesk',sans-serif;box-shadow:0 4px 14px rgba(124,58,237,0.3);transition:opacity .2s;" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">💳 Pay $10 & Get Access</a>
+        <a href="mailto:nuwamanya.ony@gmail.com?subject=VIP Payment — ${encodeURIComponent(t.name)}&body=Hi, I would like to pay $${price} for VIP access to: ${encodeURIComponent(t.name)}. Please send me payment details and my access key. Thank you." style="display:flex;align-items:center;justify-content:center;gap:8px;padding:9px 0;border-radius:10px;background:linear-gradient(135deg,#7c3aed,#2563eb);color:#fff;font-size:13px;font-weight:700;text-decoration:none;font-family:'Space Grotesk',sans-serif;box-shadow:0 4px 14px rgba(124,58,237,0.3);transition:opacity .2s;" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">💳 Pay $${price} & Get Access</a>
 
         <!-- DIVIDER -->
         <div style="display:flex;align-items:center;gap:8px;">
           <div style="flex:1;height:1px;background:var(--border);"></div>
-          <span style="font-size:11px;color:var(--muted);font-weight:600;">Already paid?</span>
+          <span style="font-size:10px;color:var(--muted);font-weight:600;">Already paid?</span>
           <div style="flex:1;height:1px;background:var(--border);"></div>
         </div>
 
         <!-- ACCESS KEY INPUT -->
-        <input id="accessKeyInput" type="password" placeholder="Enter your access key..." style="width:100%;padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:14px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='#7c3aed'" onblur="this.style.borderColor=''" onkeydown="if(event.key==='Enter')checkAccessKey(${t.id})">
-        <div id="keyError" style="display:none;font-size:12px;color:#dc2626;text-align:center;font-weight:600;">❌ Wrong access key. Contact admin for help.</div>
-        <button class="dl-btn primary" onclick="checkAccessKey(${t.id})">🔓 Unlock & Download</button>
-        <a href="mailto:nuwamanya.ony@gmail.com?subject=VIP Access Key Request — ${encodeURIComponent(t.name)}" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 0;border-radius:10px;border:1px solid var(--border);background:var(--faint);color:var(--muted);font-size:13px;font-weight:700;text-decoration:none;font-family:'Space Grotesk',sans-serif;transition:background .2s;" onmouseover="this.style.background='var(--border)'" onmouseout="this.style.background='var(--faint)'">📧 Contact Admin</a>
+        <input id="accessKeyInput" type="password" placeholder="Enter your access key..." style="width:100%;padding:8px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:13px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='#7c3aed'" onblur="this.style.borderColor=''" onkeydown="if(event.key==='Enter')checkAccessKey(${t.id})">
+        <div id="keyError" style="display:none;font-size:11px;color:#dc2626;text-align:center;font-weight:600;">❌ Wrong access key. Contact admin for help.</div>
+        <button class="dl-btn primary" style="padding:9px 0;" onclick="checkAccessKey(${t.id})">🔓 Unlock & Download</button>
+        <a href="mailto:nuwamanya.ony@gmail.com?subject=VIP Access Key Request — ${encodeURIComponent(t.name)}" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:7px 0;border-radius:10px;border:1px solid var(--border);background:var(--faint);color:var(--muted);font-size:12px;font-weight:700;text-decoration:none;font-family:'Space Grotesk',sans-serif;transition:background .2s;" onmouseover="this.style.background='var(--border)'" onmouseout="this.style.background='var(--faint)'">📧 Contact Admin</a>
       </div>`;
   } else if(t.locked){
     btns.innerHTML=`<button class="dl-btn locked">🔒 VIP Only</button>`;
@@ -849,16 +855,19 @@ function openModal(id){
   document.body.style.overflow='hidden';
 }
 
+// Map of tool ID -> valid access key hash
+const _h=(s)=>{let h=0;for(let i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}return h;};
+const VIP_KEYS = {
+  57: _h('NU-CG0CP7QT')
+};
+
 function checkAccessKey(id){
   const t=TOOLS.find(x=>x.id===id);
   const input=document.getElementById('accessKeyInput');
   const err=document.getElementById('keyError');
   if(!input)return;
-  // Key verification using hashed comparison
   const _v=input.value;
-  const _h=(s)=>{let h=0;for(let i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}return h;};
-  const _k=[0x1f4,0x1f4,0x1f4,0x200,0x21].map((c,i)=>String.fromCharCode(c-i*0+([48,50,50,50,48,33][i]||0)));
-  const _valid=_h(_v)===_h([50,50,50,50,48,48,33].map(c=>String.fromCharCode(c)).join(''));
+  const _valid=_h(_v)===VIP_KEYS[id];
   if(_valid){
     err.style.display='none';
     input.style.borderColor='#10b981';
