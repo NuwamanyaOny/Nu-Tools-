@@ -834,22 +834,34 @@ function openModal(id){
 }
 
 // NOTE: This client-side key check is a convenience gate, not real security —
-// anyone can view page source and read the valid key hash below. Do not treat
-// this as protecting anything sensitive. For real access control, verify keys
-// via a small server-side function (e.g. a Cloudflare Worker / Vercel serverless
-// function) instead of comparing hashes in the browser.
-const _h=(s)=>{let h=0;for(let i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}return h;};
+// anyone can view page source and read the salt + valid key hash below, then
+// brute-force guesses against it offline (where PBKDF2's slowness no longer
+// helps much, since an attacker can parallelize on their own hardware). Do
+// not treat this as protecting anything sensitive. For real access control,
+// verify keys via a small server-side function (e.g. a Cloudflare Worker /
+// Vercel serverless function) instead of comparing hashes in the browser.
+const VIP_SALT = 'nu-tools-vip-salt-2026';
+const VIP_ITERATIONS = 100000;
+async function pbkdf2Hex(password, saltStr, iterations, keyLenBytes){
+  const enc = new TextEncoder();
+  const keyMaterial = await crypto.subtle.importKey('raw', enc.encode(password), {name:'PBKDF2'}, false, ['deriveBits']);
+  const derivedBits = await crypto.subtle.deriveBits(
+    {name:'PBKDF2', salt: enc.encode(saltStr), iterations, hash:'SHA-256'},
+    keyMaterial, keyLenBytes*8
+  );
+  return Array.from(new Uint8Array(derivedBits)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
 const VIP_KEYS = {
-  57: _h('NU-CG0CP7QT')
+  57: '9b748cc50e44e66b0d789618ab2b5c6e7ec2958d18a5fcdf326bc13ab0bb0066'
 };
 
-function checkAccessKey(id){
+async function checkAccessKey(id){
   const t=TOOLS.find(x=>x.id===id);
   const input=document.getElementById('accessKeyInput');
   const err=document.getElementById('keyError');
   if(!input)return;
   const _v=input.value;
-  const _valid=_h(_v)===VIP_KEYS[id];
+  const _valid=(await pbkdf2Hex(_v, VIP_SALT, VIP_ITERATIONS, 32))===VIP_KEYS[id];
   if(_valid){
     err.style.display='none';
     input.style.borderColor='#10b981';
