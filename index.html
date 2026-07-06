@@ -428,13 +428,9 @@ body.dark .privacy-contact-link{color:#60a5fa;}
 <div class="grid" id="toolGrid"></div>
 
 <!-- NATIVE BANNER AD (lazy-loaded) -->
-<div style="max-width:648px;margin:28px auto 0;padding:0 16px;">
+<div style="max-width:648px;margin:48px auto 0;padding:0 16px;">
+  <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);text-align:center;margin-bottom:8px;opacity:0.6;">Advertisement</div>
   <div id="container-94d8016ec8e2cbb01c9d06ffcdce4b99" class="ad-slot" data-ad="native"></div>
-</div>
-
-<!-- AD BANNER (lazy-loaded) -->
-<div style="display:flex;justify-content:center;margin:32px auto 0;max-width:648px;padding:0 16px;">
-  <div id="ad-banner-slot" class="ad-slot" data-ad="banner"></div>
 </div>
 
 <section class="yt-section">
@@ -449,6 +445,12 @@ body.dark .privacy-contact-link{color:#60a5fa;}
     ▶ Visit @software_support
   </a>
 </section>
+
+<!-- AD BANNER (lazy-loaded) — moved further down page, away from the tools grid -->
+<div style="display:flex;flex-direction:column;align-items:center;margin:40px auto 0;max-width:648px;padding:0 16px;">
+  <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);text-align:center;margin-bottom:8px;opacity:0.6;">Advertisement</div>
+  <div id="ad-banner-slot" class="ad-slot" data-ad="banner"></div>
+</div>
 
 <div class="email-banner">
   <div class="email-inner">
@@ -727,6 +729,20 @@ function buildCard(t,delay){
   </div>`;
 }
 
+function buildInGridAd(){
+  return `<div class="tool-card" style="grid-column:1/-1;align-items:center;text-align:center;cursor:default;">
+    <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);opacity:0.6;">Advertisement</div>
+    <div id="container-ingrid-banner-320x50" class="ad-slot" data-ad="ingrid"></div>
+  </div>`;
+}
+
+function observeAdSlots(){
+  document.querySelectorAll('.ad-slot:not([data-observed])').forEach(el=>{
+    el.setAttribute('data-observed','1');
+    adObserver.observe(el);
+  });
+}
+
 function renderTools(){
   const grid=document.getElementById('toolGrid');
   const q=currentSearch.toLowerCase();
@@ -740,7 +756,12 @@ function renderTools(){
     grid.innerHTML=`<div class="empty"><div class="empty-icon">🔍</div><div class="empty-title">No tools found</div><div class="empty-sub">Try a different search or category</div></div>`;
     return;
   }
-  grid.innerHTML=visible.map((t,i)=>buildCard(t,(i*0.07).toFixed(2))).join('');
+  const cards=visible.map((t,i)=>buildCard(t,(i*0.07).toFixed(2)));
+  if(cards.length>8){
+    cards.splice(8,0,buildInGridAd());
+  }
+  grid.innerHTML=cards.join('');
+  observeAdSlots();
 }
 
 function filterCat(cat,el){
@@ -941,10 +962,6 @@ function closeModalBtn(){
   document.body.style.overflow='';
 }
 
-renderTools();
-
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModalBtn();});
-
 // LAZY-LOAD AD SCRIPTS — only fetch third-party ad code once the slot
 // actually scrolls into view, instead of blocking initial page load.
 function loadNativeAd(container){
@@ -960,17 +977,27 @@ function loadBannerAd(container){
   s.src='https://www.highperformanceformat.com/f0b82051a63267031a013e5953e90a53/invoke.js';
   container.appendChild(s);
 }
+function loadInGridAd(container){
+  window.atOptions={key:'a3454c575f3a7f995e3c93a2e1344b5b',format:'iframe',height:50,width:320,params:{}};
+  const s=document.createElement('script');
+  s.src='https://consumptionbackwardsentiments.com/a3454c575f3a7f995e3c93a2e1344b5b/invoke.js';
+  container.appendChild(s);
+}
 const adObserver=new IntersectionObserver((entries,obs)=>{
   entries.forEach(entry=>{
     if(entry.isIntersecting){
       const el=entry.target;
       if(el.dataset.ad==='native') loadNativeAd(el);
       if(el.dataset.ad==='banner') loadBannerAd(el);
+      if(el.dataset.ad==='ingrid') loadInGridAd(el);
       obs.unobserve(el);
     }
   });
 },{rootMargin:'200px'});
-document.querySelectorAll('.ad-slot').forEach(el=>adObserver.observe(el));
+
+renderTools();
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModalBtn();});
 
 // PWA INSTALL PROMPT
 let pwaPrompt = null;
