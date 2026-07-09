@@ -16,11 +16,28 @@
 <meta property="og:title" content="Nu Tools — Software Support 🛠️">
 <meta property="og:description" content="Premium Tools, Apps & Utilities — All Free to Download.">
 <meta property="og:url" content="https://nu-tools.vercel.app">
-<!-- TODO: replace with a real hosted image (1200x630px) once you have one — data URIs are not reliably supported as og:image by most platforms -->
 <meta property="og:image" content="https://nu-tools.vercel.app/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Nu Tools — Software Support 🛠️">
 <meta name="twitter:description" content="Premium Tools, Apps & Utilities — All Free to Download.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Nu Tools",
+  "alternateName": "Software Support Tools Hub",
+  "url": "https://nu-tools.vercel.app",
+  "description": "Premium Tools, Apps & Utilities — All Free to Download.",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Software Support",
+    "url": "https://nu-tools.vercel.app",
+    "sameAs": [
+      "https://youtube.com/@software_support"
+    ]
+  }
+}
+</script>
 <title>Software Support 🛠️ — Tools Hub</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
@@ -72,6 +89,40 @@ body.dark nav{background:rgba(6,9,15,0.85);}
 .nav-links a:hover{color:var(--text);background:var(--faint);}
 .nav-cta{padding:7px 16px!important;background:var(--glowsoft)!important;border:1px solid rgba(37,99,235,0.4)!important;color:#2563eb!important;border-radius:8px!important;}
 body.dark .nav-cta{color:#60a5fa!important;}
+
+/* MOBILE HAMBURGER MENU */
+.mobile-menu-btn{display:none;background:var(--faint);border:1px solid var(--border);color:var(--text);width:38px;height:38px;border-radius:8px;font-size:16px;cursor:pointer;align-items:center;justify-content:center;flex-shrink:0;}
+.mobile-menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:400;opacity:0;pointer-events:none;transition:opacity .25s ease;}
+body.dark .mobile-menu-overlay{background:rgba(0,0,0,0.7);}
+.mobile-menu-overlay.show{opacity:1;pointer-events:all;}
+.mobile-menu-panel{position:fixed;top:0;left:0;bottom:0;width:78%;max-width:300px;background:var(--surface);border-right:1px solid var(--border);z-index:401;transform:translateX(-100%);transition:transform .3s ease;padding:20px;overflow-y:auto;box-shadow:8px 0 30px rgba(0,0,0,0.15);}
+body.dark .mobile-menu-panel{box-shadow:8px 0 30px rgba(0,0,0,0.5);}
+.mobile-menu-panel.show{transform:translateX(0);}
+.mobile-menu-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border);}
+.mobile-menu-close{background:var(--faint);border:1px solid var(--border);color:var(--muted);width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:16px;display:grid;place-items:center;flex-shrink:0;}
+.mobile-menu-links{display:flex;flex-direction:column;gap:2px;}
+.mobile-menu-links a{display:flex;align-items:center;gap:10px;color:var(--text);text-decoration:none;font-size:14px;font-weight:600;padding:12px 10px;border-radius:10px;transition:background .2s;font-family:'Space Grotesk',sans-serif;}
+.mobile-menu-links a:hover{background:var(--faint);}
+.mobile-menu-divider{height:1px;background:var(--border);margin:10px 0;}
+@media(max-width:480px){
+  .mobile-menu-btn{display:flex;}
+}
+
+/* COOKIE CONSENT BANNER */
+.cookie-banner{position:fixed;bottom:0;left:0;right:0;z-index:900;background:var(--surface);border-top:1px solid var(--border2);padding:16px 20px;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;box-shadow:0 -8px 30px rgba(0,0,0,0.12);transform:translateY(110%);transition:transform .4s ease;}
+body.dark .cookie-banner{box-shadow:0 -8px 30px rgba(0,0,0,0.4);}
+.cookie-banner.show{transform:translateY(0);}
+.cookie-text{font-size:12.5px;color:var(--muted);max-width:520px;line-height:1.5;}
+.cookie-text a{color:#2563eb;text-decoration:underline;}
+body.dark .cookie-text a{color:#60a5fa;}
+.cookie-btns{display:flex;gap:8px;flex-shrink:0;}
+.cookie-btn-accept{padding:9px 20px;border-radius:9px;border:none;background:linear-gradient(135deg,#1d4ed8,#7c3aed);color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'Space Grotesk',sans-serif;white-space:nowrap;}
+.cookie-btn-decline{padding:9px 16px;border-radius:9px;border:1px solid var(--border);background:var(--faint);color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;font-family:'Space Grotesk',sans-serif;white-space:nowrap;}
+@media(max-width:480px){
+  .cookie-banner{padding:14px 16px;justify-content:flex-start;}
+  .cookie-btns{width:100%;}
+  .cookie-btn-accept,.cookie-btn-decline{flex:1;}
+}
 
 /* HERO */
 .hero{position:relative;z-index:1;text-align:center;padding:72px 20px 56px;animation:fadeUp .6s ease both;}
@@ -236,8 +287,12 @@ body.dark .modal{box-shadow:0 20px 60px rgba(0,0,0,0.5);}
 @media(max-width:480px){
   .tool-card.featured{flex-direction:column;}
   .featured-actions{flex-direction:row;min-width:unset;width:100%;}
+  nav{padding:0 12px;}
   nav .nav-links a:not(.nav-cta){display:none;}
-  nav #themeToggle{font-size:12px;padding:6px 10px;}
+  nav .nav-cta{display:none;}
+  nav #installBtn{display:none!important;}
+  nav #themeToggle{font-size:11px;padding:6px 9px;}
+  .nav-links{gap:6px;}
   .email-inner{flex-direction:column;align-items:flex-start;}
   .wa-inner{flex-direction:column;align-items:flex-start;}
   .hero{padding:48px 16px 40px;}
@@ -372,12 +427,32 @@ body.dark .privacy-contact-link{color:#60a5fa;}
   </a>
   <div class="nav-links">
     <a href="#tools">Tools</a>
+    <a href="#" onclick="openPage('aboutPage');return false;">About</a>
     <a href="https://youtube.com/@software_support?si=CWYwsfXKbVHcXjRT" target="_blank">YouTube</a>
     <button id="themeToggle" onclick="toggleTheme()" style="background:var(--faint);border:1px solid var(--border);color:var(--text);padding:7px 12px;border-radius:8px;cursor:pointer;font-size:14px;font-family:'Space Grotesk',sans-serif;font-weight:600;transition:all .2s;">🌙 Dark</button>
     <button id="installBtn" onclick="installPWA()" style="display:none;padding:7px 14px;background:linear-gradient(135deg,#1d4ed8,#7c3aed);border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'Space Grotesk',sans-serif;transition:opacity .2s;">📲 Install App</button>
-    <a href="mailto:nuwamanya.ony@gmail.com" class="nav-cta">📧 Email</a>
+    <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">☰</button>
   </div>
 </nav>
+
+<div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
+<aside class="mobile-menu-panel" id="mobileMenuPanel">
+  <div class="mobile-menu-header">
+    <div class="nav-name">Nu <span>Tools</span></div>
+    <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
+  </div>
+  <nav class="mobile-menu-links">
+    <a href="#tools" onclick="closeMobileMenu()">🧰 Tools</a>
+    <a href="https://youtube.com/@software_support?si=CWYwsfXKbVHcXjRT" target="_blank">▶️ YouTube</a>
+    <a href="https://whatsapp.com/channel/0029VaBu4kkJuyA3UlC9eg3i" target="_blank">💬 WhatsApp</a>
+    <a href="mailto:nuwamanya.ony@gmail.com">📧 Email</a>
+    <div class="mobile-menu-divider"></div>
+    <a href="#" onclick="openPage('aboutPage');closeMobileMenu();return false;">ℹ️ About</a>
+    <a href="#" onclick="openPrivacy();closeMobileMenu();return false;">🔒 Privacy</a>
+    <a href="#" onclick="openPage('termsPage');closeMobileMenu();return false;">📜 Terms</a>
+    <a href="#" onclick="openPage('dmcaPage');closeMobileMenu();return false;">©️ DMCA</a>
+  </nav>
+</aside>
 
 <section class="hero">
   <div class="hero-glow"></div>
@@ -388,7 +463,7 @@ body.dark .privacy-contact-link{color:#60a5fa;}
   <h1>
     <span class="white">Nu</span> <span class="grad">Tools</span>
   </h1>
-  <p class="hero-sub">Premium Tools, Apps &amp; Utilities Free to Download. Trusted by users worldwide.</p>
+  <p class="hero-sub">Premium Tools, Apps &amp; Utilities — All Free to Download. Trusted by users worldwide.</p>
   <div class="hero-stats">
     <div class="hero-stats-row">
       <div class="hero-stat"><span>🧰</span> <b id="heroCount">47</b> tools</div>
@@ -466,7 +541,7 @@ body.dark .privacy-contact-link{color:#60a5fa;}
   <div class="wa-inner">
     <div class="wa-text">
       <h3>📢 JOIN OUR WHATSAPP CHANNEL</h3>
-      <p>Get notified when new tools are added join 2K+ members</p>
+      <p>Get notified when new tools are added — join 2K+ members</p>
     </div>
     <a class="wa-link" href="https://whatsapp.com/channel/0029VaBu4kkJuyA3UlC9eg3i" target="_blank">💬 Join Now</a>
   </div>
@@ -508,7 +583,7 @@ body.dark .privacy-contact-link{color:#60a5fa;}
     <a href="mailto:nuwamanya.ony@gmail.com">Support</a>
     <a href="https://youtube.com/@software_support?si=CWYwsfXKbVHcXjRT" target="_blank">YouTube</a>
   </div>
-  <div class="footer-copy">© 2026 Nu Tools Developed by Software Support🛠️</div>
+  <div class="footer-copy">© 2026 Software Support 🛠️ — One Platform • Unlimited Tools 🌍</div>
 </footer>
 
 <div class="modal-overlay" id="modal" onclick="closeModal(event)">
@@ -555,7 +630,7 @@ const TOOLS=[
   {id:30,name:"HeroBet Premium",emoji:"🦸",color:"#f97316",category:"betting",badge:"free",desc:"Premium hero-level betting tips and match predictions for football.",longDesc:"HeroBet Premium provides elite-level betting insights, match previews, and tips across football leagues. Built for bettors who want an edge.",size:"—",version:"Premium",type:"APK",downloadUrl:"https://shrinkme.click/Hero-",previewUrl:null,locked:false},
   {id:31,name:"Bet Better Premium",emoji:"📈",color:"#10b981",category:"betting",badge:"free",desc:"Smarter betting tips with odds comparison and value bet detection.",longDesc:"Bet Better Premium helps you bet smarter — value bet alerts, odds comparisons, and curated tips to maximise returns across football and other sports.",size:"—",version:"Premium",type:"APK",downloadUrl:"https://shrinkme.click/Bet-",previewUrl:null,locked:false},
   {id:32,name:"Winstream Premium",emoji:"🌊",color:"#2563eb",category:"betting",badge:"free",desc:"Streaming football tips and live predictions. Win consistently with Winstream.",longDesc:"Winstream Premium offers live in-play tips alongside pre-match predictions. Designed for bettors who want real-time insights as matches unfold.",size:"—",version:"Premium",type:"APK",downloadUrl:"https://shrinkme.click/Win-",previewUrl:null,locked:false},
-  {id:33,name:"Elite Soccer Tips",emoji:"🏟️",color:"#059669",category:"betting",badge:"free",desc:"Elite-level premium soccer tips from professional analysts. 2026 updated.",longDesc:"Elite Soccer Tips Premium delivers professional-grade football predictions from experienced analysts. Covers all major leagues with daily tips and match breakdowns.",size:"—",version:"Premium",type:"APK",downloadUrl:"https://shrinkme.click/Elite-",previewUrl:null,locked:false},
+  {id:33,name:"Elite Soccer Tips",emoji:"⚽",color:"#059669",category:"betting",badge:"free",desc:"Elite-level premium soccer tips from professional analysts. 2026 updated.",longDesc:"Elite Soccer Tips Premium delivers professional-grade football predictions from experienced analysts. Covers all major leagues with daily tips and match breakdowns.",size:"—",version:"Premium",type:"APK",downloadUrl:"https://shrinkme.click/Elite-",previewUrl:null,locked:false},
   {id:34,name:"Elite Soccer Tips Lib",emoji:"📚",color:"#059669",category:"betting",badge:"free",desc:"Library file companion for Elite Soccer Tips Premium app.",longDesc:"The official library file for Elite Soccer Tips Premium. Install this alongside the main app to unlock all features and ensure full functionality.",size:"—",version:"Lib",type:"APK",downloadUrl:"https://shrinkme.click/Elite-lib",previewUrl:null,locked:false},
   {id:35,name:"Magic Score Premium",emoji:"✨",color:"#a855f7",category:"betting",badge:"free",desc:"Magic-level correct score predictions with proven accuracy and daily tips.",longDesc:"Magic Score Premium uses advanced algorithms and expert analysis to deliver correct score predictions with consistently high accuracy rates.",size:"—",version:"Premium",type:"APK",downloadUrl:"https://shrinkme.click/Magic-",previewUrl:null,locked:false},
   {id:36,name:"FutPicks Correct Scores",emoji:"🏆",color:"#f59e0b",category:"betting",badge:"free",desc:"Premium correct score tips for football from FutPicks analysts.",longDesc:"FutPicks Correct Scores Premium focuses exclusively on exact score betting — one of the most rewarding bet types. Daily tips with confidence ratings.",size:"—",version:"Premium",type:"APK",downloadUrl:"https://shrinkme.click/FUT-",previewUrl:null,locked:false},
@@ -578,7 +653,7 @@ const TOOLS=[
   {id:53,name:"DATips Premium",emoji:"📉",color:"#10b981",category:"betting",badge:"free",desc:"Data-driven football tips. Analytics-first approach to sports predictions.",longDesc:"DATips Premium takes a data-first approach to football predictions. Every tip is backed by statistical models, team form, and head-to-head data.",size:"—",version:"Premium",type:"APK",downloadUrl:"https://shrinkme.click/Datips",previewUrl:null,locked:false},
   {id:54,name:"Betting Tips Premium",emoji:"💰",color:"#eab308",category:"betting",badge:"free",desc:"Comprehensive premium betting tips for football and sports markets.",longDesc:"Betting Tips Premium gives you a broad set of daily tips across football and other sports markets. Simple interface, reliable picks, and daily updates.",size:"—",version:"Premium",type:"APK",downloadUrl:"https://shrinkme.click/BTips",previewUrl:null,locked:false}
   ,{id:56,name:"Football Strike 1402KM",emoji:"⚡",color:"#dc2626",category:"gaming",badge:"hot",desc:"Football Strike speed hack — 1402 KM/H edition. Download and dominate.",longDesc:"Football Strike 1402KM/H speed hack. Install and enjoy ultra-fast shots on Football Strike. Free to download.",size:"—",version:"1402KMH",type:"APK",downloadUrl:"https://shrinkme.click/1402KM",previewUrl:null,locked:false}
-  ,{id:57,name:"Fixed Match Analyzer For Smart Bettors",emoji:"⚽",color:"#0f5132",category:"vip",badge:"vip",desc:"Exclusive VIP fixed match analysis tool. Access key required to download.",longDesc:"Fixed Match Analyzer gives smart bettors deep analytical insight into fixed match data. Only authorised users with an access key can download this file. Contact admin to get your access key.",size:"—",version:"2026",type:"File",downloadUrl:"https://devuploads.com/nsdkf8cvr44g",previewUrl:null,locked:true,keyLocked:true,price:15}
+  ,{id:57,name:"Sharp Bettor Analysis Pro",emoji:"⚽",color:"#0f5132",category:"vip",badge:"vip",desc:"VIP-only match analysis for people who play to win.",longDesc:"Most bettors are guessing. This is for the ones who aren't. Sharp Bettor Analysis Pro gives you the statistical breakdown serious bettors use to spot value before the odds shift. One-time APK download — install it once, use it anytime. VIP access only, unlocked instantly with your key.",size:"—",version:"2026",type:"APK",downloadUrl:"https://devuploads.com/nsdkf8cvr44g",previewUrl:null,locked:true,keyLocked:true,price:10}
 ];
 
 let currentCat='all', currentSearch='';
@@ -625,7 +700,7 @@ window.addEventListener('beforeinstallprompt',(e)=>{
 const manifestData = {
   name: "Nu Tools — Software Support",
   short_name: "Nu Tools",
-  description: "Premium Tools, Apps & Utilities Free to Download",
+  description: "Premium Tools, Apps & Utilities — All Free to Download",
   start_url: "/",
   display: "standalone",
   background_color: "#06090f",
@@ -997,7 +1072,29 @@ const adObserver=new IntersectionObserver((entries,obs)=>{
 
 renderTools();
 
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModalBtn();});
+function toggleMobileMenu(){
+  document.getElementById('mobileMenuOverlay').classList.add('show');
+  document.getElementById('mobileMenuPanel').classList.add('show');
+  document.body.style.overflow='hidden';
+}
+function closeMobileMenu(){
+  document.getElementById('mobileMenuOverlay').classList.remove('show');
+  document.getElementById('mobileMenuPanel').classList.remove('show');
+  document.body.style.overflow='';
+}
+
+// COOKIE CONSENT
+function handleCookieChoice(accepted){
+  localStorage.setItem('cookieConsent', accepted ? 'accepted' : 'declined');
+  document.getElementById('cookieBanner').classList.remove('show');
+}
+if(!localStorage.getItem('cookieConsent')){
+  setTimeout(()=>{
+    document.getElementById('cookieBanner').classList.add('show');
+  }, 800);
+}
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModalBtn();closeMobileMenu();}});
 
 // PWA INSTALL PROMPT
 let pwaPrompt = null;
@@ -1070,6 +1167,15 @@ function closePage(id){
 </script>
 
 <!-- PWA INSTALL PROMPT -->
+<!-- COOKIE CONSENT BANNER -->
+<div class="cookie-banner" id="cookieBanner">
+  <div class="cookie-text">🍪 We use cookies and third-party ads to keep Nu Tools free. By continuing, you agree to our <a href="#" onclick="openPrivacy();return false;">Privacy Policy</a>.</div>
+  <div class="cookie-btns">
+    <button class="cookie-btn-decline" onclick="handleCookieChoice(false)">Decline</button>
+    <button class="cookie-btn-accept" onclick="handleCookieChoice(true)">Accept</button>
+  </div>
+</div>
+
 <div id="pwa-overlay">
   <div id="pwa-box">
     <div class="pwa-icon-wrap">
