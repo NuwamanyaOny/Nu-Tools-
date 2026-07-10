@@ -474,8 +474,9 @@ body.dark .privacy-contact-link{color:#60a5fa;}
   </div>
   <nav class="mobile-menu-links">
     <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});closeMobileMenu();return false;">🏠 Home</a>
-    <a href="https://whatsapp.com/channel/0029VaBu4kkJuyA3UlC9eg3i" target="_blank">🙋 Request a Tool</a>
+    <a href="#requestSection" onclick="closeMobileMenu();setTimeout(()=>document.getElementById('requestInput').focus(),350);">🙋 Request a Tool</a>
     <a href="#tools" onclick="closeMobileMenu()">🧰 Tools</a>
+    <a href="#" onclick="shareSite();return false;">📤 Share App</a>
     <a href="#" onclick="openPage('aboutPage');closeMobileMenu();return false;">ℹ️ About</a>
     <a href="#" onclick="jumpToCategory('vip');closeMobileMenu();return false;">🔐 VIP Access</a>
     <div class="mobile-menu-divider"></div>
@@ -501,10 +502,10 @@ body.dark .privacy-contact-link{color:#60a5fa;}
   <p class="hero-sub">Premium Tools, Apps &amp; Utilities</p>
   <div class="hero-stats">
     <div class="hero-stats-row">
-      <div class="hero-stat"><span>🧰</span> <b id="heroCount">47</b> tools</div>
+      <div class="hero-stat"><span>🧰</span> <b id="heroCount">48</b> tools</div>
       <span class="sep">·</span>
       <div class="hero-stat-stack">
-        <div class="hero-stat"><span>⬇️</span> <b>Free</b> downloads</div>
+        <div class="hero-stat"><span>⬇️</span> <b>Instant</b> downloads</div>
         <div class="hero-stat" style="justify-content:center;"><span>🌍</span> <b>Global</b></div>
       </div>
     </div>
@@ -583,7 +584,7 @@ body.dark .privacy-contact-link{color:#60a5fa;}
   </div>
 </div>
 
-<div class="request-section">
+<div class="request-section" id="requestSection">
   <div class="request-inner">
     <div class="request-title">🛠️ Request a Tool</div>
     <div class="request-sub">Can't find what you need? Request it and we'll add it!</div>
@@ -668,7 +669,7 @@ const TOOLS=[
   {id:26,name:"Mavix Draws Premium",emoji:"⚖️",color:"#6366f1",category:"betting",badge:"free",desc:"Specialised draw predictions and betting tips for football matches.",longDesc:"Mavix Draws Premium focuses on draw predictions — one of the most profitable bet types. Get curated draw tips with match analysis and confidence ratings.",size:"—",version:"Premium",type:"APK",downloadUrl:"https://shrinkme.click/Mavix",previewUrl:null,locked:false},
   {id:27,name:"Prime Betting Tips",emoji:"💎",color:"#a855f7",category:"betting",badge:"free",desc:"Premium multi-sport betting tips with high-accuracy predictions.",longDesc:"Prime Betting Tips Premium covers football, basketball, tennis and more. Get daily premium tips with detailed match analysis and a strong track record.",size:"—",version:"Premium",type:"APK",downloadUrl:"https://shrinkme.click/Prim-",previewUrl:null,locked:false},
   {id:28,name:"Hill Tips Premium",emoji:"⛰️",color:"#0891b2",category:"betting",badge:"free",desc:"Best premium football tips with expert analysis and high win rates.",longDesc:"Hill Tips Premium delivers expert football betting tips daily. Known for high win rates and detailed pre-match analysis across major leagues.",size:"—",version:"Premium",type:"APK",downloadUrl:"https://shrinkme.click/Hill",previewUrl:null,locked:false},
-  {id:29,name:"PK Correct Scores",emoji:"🎯",color:"#dc2626",category:"betting",badge:"free",desc:"Premium correct score predictions. High-accuracy football score tips.",longDesc:"PK Correct Scores Premium specialises in exact score predictions for football matches worldwide. Comes with detailed match data and historical accuracy stats.",size:"—",version:"Premium",type:"APK",downloadUrl:"https://shrinkme.click/Pk-",previewUrl:null,locked:false},
+  {id:29,name:"PK Correct Scores",emoji:"🎯",color:"#dc2626",category:"betting",badge:"free",desc:"Correct score predictions and football tips.",longDesc:"PK Correct Scores Premium focuses on exact score predictions for football matches worldwide. Comes with match data and stats.",size:"—",version:"Premium",type:"APK",downloadUrl:"https://shrinkme.click/Pk-",previewUrl:null,locked:false},
   {id:30,name:"HeroBet Premium",emoji:"🦸",color:"#f97316",category:"betting",badge:"free",desc:"Premium hero-level betting tips and match predictions for football.",longDesc:"HeroBet Premium provides elite-level betting insights, match previews, and tips across football leagues. Built for bettors who want an edge.",size:"—",version:"Premium",type:"APK",downloadUrl:"https://shrinkme.click/Hero-",previewUrl:null,locked:false},
   {id:31,name:"Bet Better Premium",emoji:"📈",color:"#10b981",category:"betting",badge:"free",desc:"Smarter betting tips with odds comparison and value bet detection.",longDesc:"Bet Better Premium helps you bet smarter — value bet alerts, odds comparisons, and curated tips to maximise returns across football and other sports.",size:"—",version:"Premium",type:"APK",downloadUrl:"https://shrinkme.click/Bet-",previewUrl:null,locked:false},
   {id:32,name:"Winstream Premium",emoji:"🌊",color:"#2563eb",category:"betting",badge:"free",desc:"Streaming football tips and live predictions. Win consistently with Winstream.",longDesc:"Winstream Premium offers live in-play tips alongside pre-match predictions. Designed for bettors who want real-time insights as matches unfold.",size:"—",version:"Premium",type:"APK",downloadUrl:"https://shrinkme.click/Win-",previewUrl:null,locked:false},
@@ -688,7 +689,7 @@ const TOOLS=[
   {id:46,name:"Soccer Pro Analysis",emoji:"📊",color:"#374151",category:"betting",badge:"free",desc:"Professional soccer match analysis app with in-depth stats and tips.",longDesc:"Soccer Pro Analysis Premium delivers deep statistical analysis for football matches. Form guides, head-to-head records, and expert tips all in one place.",size:"—",version:"Premium",type:"APK",downloadUrl:"https://shrinkme.click/Sccrpro",previewUrl:null,locked:false},
   {id:47,name:"TOT Betting Tips",emoji:"🎰",color:"#f59e0b",category:"betting",badge:"free",desc:"Premium TOT betting tips. Daily football predictions with strong accuracy.",longDesc:"TOT Betting Tips Premium offers daily curated football tips with a focus on consistent accuracy. Covers top leagues with transparent results history.",size:"—",version:"Premium",type:"APK",downloadUrl:"https://shrinkme.click/TOT",previewUrl:null,locked:false},
   {id:48,name:"Tips Pro AI Premium",emoji:"🧠",color:"#6366f1",category:"betting",badge:"free",desc:"AI-enhanced premium tips. Smart predictions powered by machine learning.",longDesc:"Tips Pro AI Premium combines artificial intelligence with expert analysis to deliver smarter football betting tips. Updated daily with live data feeds.",size:"—",version:"Premium",type:"APK",downloadUrl:"https://shrinkme.click/ProAI",previewUrl:null,locked:false},
-  {id:49,name:"Elman Correct Scores",emoji:"🎖️",color:"#dc2626",category:"betting",badge:"free",desc:"Elman's premium correct score predictions. Trusted by thousands of bettors.",longDesc:"Elman Correct Scores Premium is one of the most trusted correct score prediction apps. Thousands of users rely on Elman's daily picks for football matches worldwide.",size:"—",version:"Premium",type:"APK",downloadUrl:"https://shrinkme.click/Elman",previewUrl:null,locked:false},
+  {id:49,name:"Elman Correct Scores",emoji:"🎖️",color:"#dc2626",category:"betting",badge:"free",desc:"Elman's correct score predictions.",longDesc:"Elman Correct Scores Premium offers daily correct score predictions for football matches worldwide.",size:"—",version:"Premium",type:"APK",downloadUrl:"https://shrinkme.click/Elman",previewUrl:null,locked:false},
   {id:50,name:"Elman Scores Lib",emoji:"📖",color:"#dc2626",category:"betting",badge:"free",desc:"Library file companion for Elman Correct Scores Premium app.",longDesc:"The required library file for Elman Correct Scores Premium. Install this alongside the main APK to ensure all features work correctly.",size:"—",version:"Lib",type:"File",downloadUrl:"https://shrinkme.click/Elmanlib",previewUrl:null,locked:false},
   {id:51,name:"Huge Sports Tips",emoji:"💪",color:"#f97316",category:"betting",badge:"free",desc:"Massive daily sports tips bundle. Football, basketball, tennis and more.",longDesc:"Huge Sports Tips Premium covers a wide range of sports every day. Get a large volume of curated tips with match analysis across football and other major sports.",size:"—",version:"Premium",type:"APK",downloadUrl:"https://shrinkme.click/Huge",previewUrl:null,locked:false},
   {id:52,name:"Predict Pro Premium",emoji:"🔮",color:"#a855f7",category:"betting",badge:"free",desc:"Pro-level match predictions with confidence scores and detailed analysis.",longDesc:"Predict Pro Premium delivers professional match predictions with confidence ratings, form analysis, and expert commentary for football bettors.",size:"—",version:"Premium",type:"APK",downloadUrl:"https://shrinkme.click/Predt",previewUrl:null,locked:false},
@@ -745,6 +746,35 @@ document.head.appendChild(manifestLink);
 // Auto NEW badge — tools get "new" badge for 14 days after their dateAdded
 const NEW_BADGE_DAYS = 14;
 const SITE_LAUNCH_DATE = new Date('2026-06-11'); // reference date for tools without explicit dateAdded
+
+// SHARE SITE
+function showToast(msg){
+  let t=document.getElementById('shareToast');
+  if(!t){
+    t=document.createElement('div');
+    t.id='shareToast';
+    t.style.cssText='position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(10px);background:#1e293b;color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;font-weight:600;font-family:"Space Grotesk",sans-serif;z-index:1200;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;box-shadow:0 6px 20px rgba(0,0,0,0.3);';
+    document.body.appendChild(t);
+  }
+  t.textContent=msg;
+  requestAnimationFrame(()=>{t.style.opacity='1';t.style.transform='translateX(-50%) translateY(0)';});
+  clearTimeout(t._hideTimer);
+  t._hideTimer=setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(-50%) translateY(10px)';},2200);
+}
+async function shareSite(){
+  const shareData={title:'Software Support 🛠️',text:'Check out this tools site — Premium Tools, Apps & Utilities',url:location.href};
+  if(navigator.share){
+    try{await navigator.share(shareData);}catch(e){/* user cancelled */}
+    return;
+  }
+  try{
+    await navigator.clipboard.writeText(location.href);
+    showToast('🔗 Link copied to clipboard');
+  }catch(e){
+    showToast('Copy this link: '+location.href);
+  }
+  closeMobileMenu();
+}
 
 function toggleTheme(){
   const isDark=document.body.classList.toggle('dark');
@@ -1323,12 +1353,12 @@ function closePage(id){
 
     <div class="privacy-section">
       <h2>👋 Who We Are</h2>
-      <p>Nu Tools is run by Software Support, a solo tech creator sharing free tools, apps, and utilities with a global audience. What started as a small YouTube and WhatsApp channel has grown into a complete platform trusted by thousands of users worldwide.</p>
+      <p>Nu Tools is run by Software Support, a solo tech creator sharing tools, apps, and utilities with a global audience. What started as a small YouTube and WhatsApp channel has grown into a complete platform.</p>
     </div>
 
     <div class="privacy-section">
       <h2>🎯 Our Mission</h2>
-      <p>We believe useful software tools shouldn't be locked behind confusing app stores or paywalls. Nu Tools brings together premium utilities, file managers, mods, and curated tips in one clean, easy-to-navigate hub — free for everyone.</p>
+      <p>We believe useful software tools shouldn't be locked behind confusing app stores. Nu Tools brings together utilities, file managers, mods, and curated tips in one clean, easy-to-navigate hub — most tools are free, with a small VIP selection available for a one-time unlock fee.</p>
     </div>
 
     <div class="privacy-section">
