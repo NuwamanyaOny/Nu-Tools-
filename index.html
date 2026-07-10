@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#2563eb">
-<meta name="description" content="Premium Tools, Apps & Utilities — All Free to Download. By Software Support.">
+<meta name="description" content="Premium Tools, Apps & Utilities. By Software Support.">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -14,12 +14,12 @@
 <!-- Social share previews (WhatsApp, Twitter/X, Facebook) -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="Nu Tools — Software Support 🛠️">
-<meta property="og:description" content="Premium Tools, Apps & Utilities — All Free to Download.">
+<meta property="og:description" content="Premium Tools, Apps & Utilities">
 <meta property="og:url" content="https://nu-tools.vercel.app">
 <meta property="og:image" content="https://nu-tools.vercel.app/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Nu Tools — Software Support 🛠️">
-<meta name="twitter:description" content="Premium Tools, Apps & Utilities — All Free to Download.">
+<meta name="twitter:description" content="Premium Tools, Apps & Utilities">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -27,7 +27,7 @@
   "name": "Nu Tools",
   "alternateName": "Software Support Tools Hub",
   "url": "https://nu-tools.vercel.app",
-  "description": "Premium Tools, Apps & Utilities — All Free to Download.",
+  "description": "Premium Tools, Apps & Utilities",
   "publisher": {
     "@type": "Organization",
     "name": "Software Support",
@@ -99,14 +99,13 @@ body.dark .nav-cta{color:#60a5fa!important;}
 /* MOBILE HAMBURGER MENU */
 .mobile-menu-btn{display:none;background:var(--faint);border:1px solid var(--border);color:var(--text);width:38px;height:38px;border-radius:8px;font-size:16px;cursor:pointer;align-items:center;justify-content:center;flex-shrink:0;}
 .nav-profile-btn{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#f97316,#ea580c);border:none;color:#fff;font-size:15px;cursor:pointer;display:grid;place-items:center;flex-shrink:0;}
-.mobile-menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:400;opacity:0;pointer-events:none;transition:opacity .25s ease;}
-body.dark .mobile-menu-overlay{background:rgba(0,0,0,0.7);}
+.mobile-menu-overlay{position:fixed;inset:0;background:transparent;z-index:400;opacity:0;pointer-events:none;transition:opacity .25s ease;}
 .mobile-menu-overlay.show{opacity:1;pointer-events:all;}
 .mobile-menu-panel{position:fixed;top:0;left:0;bottom:0;width:78%;max-width:300px;background:var(--surface);border-right:1px solid var(--border);z-index:401;transform:translateX(-100%);transition:transform .3s ease;padding:20px;overflow-y:auto;box-shadow:8px 0 30px rgba(0,0,0,0.15);}
 body.dark .mobile-menu-panel{box-shadow:8px 0 30px rgba(0,0,0,0.5);}
 .mobile-menu-panel.show{transform:translateX(0);}
 .mobile-menu-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border);}
-.mobile-menu-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#f97316,#ea580c);display:grid;place-items:center;font-size:20px;color:#fff;flex-shrink:0;}
+.mobile-menu-avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid rgba(37,99,235,0.5);}
 .mobile-menu-guest-name{font-size:15px;font-weight:700;color:var(--text);}
 .mobile-menu-guest-sub{font-size:11.5px;color:var(--muted);line-height:1.4;}
 .mobile-menu-close{background:var(--faint);border:1px solid var(--border);color:var(--muted);width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:16px;display:grid;place-items:center;flex-shrink:0;margin-left:auto;}
@@ -192,7 +191,6 @@ body.dark .tool-icon::after{border-color:rgba(255,255,255,0.08);}
 body.dark .badge-vip{background:rgba(124,58,237,0.15);color:#c084fc;}
 .tool-name{font-size:13.5px;font-weight:700;line-height:1.3;color:var(--tool-name);display:flex;align-items:center;gap:5px;flex-wrap:wrap;}
 .tool-dev{font-size:10.5px;color:var(--muted);margin-top:-3px;}
-.tool-meta{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);margin-top:1px;}
 .dl-btn-mini{flex-shrink:0;padding:7px 14px;border-radius:9px;border:none;font-size:11.5px;font-weight:700;cursor:pointer;font-family:'Space Grotesk',sans-serif;background:linear-gradient(135deg,#1d4ed8,#7c3aed);color:#fff;transition:opacity .2s;}
 .dl-btn-mini:hover{opacity:0.88;}
 .dl-btn-mini.outline{background:transparent;color:#2563eb;border:1px solid rgba(37,99,235,0.35);}
@@ -212,11 +210,9 @@ body.dark .dl-btn.outline{color:#60a5fa;}
 .trending-scroll::-webkit-scrollbar{display:none;}
 .trend-card{scroll-snap-align:start;flex:0 0 158px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:8px;cursor:pointer;position:relative;transition:transform .2s ease,border-color .2s;}
 .trend-card:hover{transform:translateY(-3px);border-color:var(--border2);}
-.trend-rank{position:absolute;top:10px;right:10px;background:linear-gradient(135deg,#1d4ed8,#7c3aed);color:#fff;font-size:10px;font-weight:800;padding:2px 7px;border-radius:6px;letter-spacing:0.3px;}
 .trend-icon{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:22px;}
 .trend-name{font-size:12.5px;font-weight:700;color:var(--tool-name);line-height:1.3;}
 .trend-stats{display:flex;flex-direction:column;gap:3px;font-size:10.5px;color:var(--muted);}
-.trend-stars{color:#f59e0b;font-size:11px;letter-spacing:1px;}
 .trend-dl{width:100%;padding:7px 0;border-radius:8px;border:none;background:var(--glowsoft);color:#2563eb;font-size:11.5px;font-weight:700;cursor:pointer;font-family:'Space Grotesk',sans-serif;}
 body.dark .trend-dl{color:#60a5fa;}
 
@@ -469,27 +465,27 @@ body.dark .privacy-contact-link{color:#60a5fa;}
 <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
 <aside class="mobile-menu-panel" id="mobileMenuPanel">
   <div class="mobile-menu-header">
-    <div class="mobile-menu-avatar">👤</div>
+    <img class="mobile-menu-avatar" src="data:image/jpeg;base64,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" alt="Ony">
     <div>
-      <div class="mobile-menu-guest-name">Guest</div>
-      <div class="mobile-menu-guest-sub">Browsing as guest</div>
+      <div class="mobile-menu-guest-name">Menu</div>
+      <div class="mobile-menu-guest-sub">Software Support</div>
     </div>
     <button class="mobile-menu-close" onclick="closeMobileMenu()">✕</button>
   </div>
   <nav class="mobile-menu-links">
     <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});closeMobileMenu();return false;">🏠 Home</a>
-    <a href="https://whatsapp.com/channel/0029VaBu4kkJuyA3UlC9eg3i" target="_blank">📦 Request a Tool</a>
+    <a href="https://whatsapp.com/channel/0029VaBu4kkJuyA3UlC9eg3i" target="_blank">🙋 Request a Tool</a>
     <a href="#tools" onclick="closeMobileMenu()">🧰 Tools</a>
     <a href="#" onclick="openPage('aboutPage');closeMobileMenu();return false;">ℹ️ About</a>
     <a href="#" onclick="jumpToCategory('vip');closeMobileMenu();return false;">🔐 VIP Access</a>
     <div class="mobile-menu-divider"></div>
-    <a href="https://youtube.com/@software_support?si=CWYwsfXKbVHcXjRT" target="_blank">▶️ YouTube</a>
-    <a href="https://whatsapp.com/channel/0029VaBu4kkJuyA3UlC9eg3i" target="_blank">💬 WhatsApp</a>
+    <a href="https://youtube.com/@software_support?si=CWYwsfXKbVHcXjRT" target="_blank"><svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink:0;"><rect width="24" height="24" rx="6" fill="#FF0000"/><path d="M10 8.5v7l6-3.5-6-3.5z" fill="#fff"/></svg> YouTube</a>
+    <a href="https://whatsapp.com/channel/0029VaBu4kkJuyA3UlC9eg3i" target="_blank"><svg width="20" height="20" viewBox="0 0 32 32" style="flex-shrink:0;" fill="#25D366"><path d="M16.01 3C9.38 3 4 8.38 4 15.01c0 2.2.59 4.29 1.7 6.15L4 29l7.99-1.66a11.9 11.9 0 0 0 4.02.7h.01c6.63 0 12.01-5.38 12.01-12.01C28.02 8.38 22.64 3 16.01 3zm0 21.86h-.01a9.86 9.86 0 0 1-5.02-1.38l-.36-.21-4.74.99 1-4.62-.24-.38a9.83 9.83 0 0 1-1.5-5.25c0-5.45 4.43-9.88 9.88-9.88 2.64 0 5.12 1.03 6.99 2.9a9.82 9.82 0 0 1 2.89 6.98c0 5.45-4.44 9.85-9.89 9.85zm5.4-7.4c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.65-2.05-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51-.17-.01-.37-.01-.57-.01s-.52.07-.8.37c-.27.3-1.05 1.02-1.05 2.5s1.07 2.9 1.22 3.1c.15.2 2.1 3.2 5.09 4.49.71.31 1.27.49 1.7.63.71.23 1.36.19 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35z"/></svg> WhatsApp</a>
     <a href="mailto:nuwamanya.ony@gmail.com">📧 Email</a>
     <div class="mobile-menu-divider"></div>
     <a href="#" onclick="openPrivacy();closeMobileMenu();return false;">🔒 Privacy</a>
     <a href="#" onclick="openPage('termsPage');closeMobileMenu();return false;">📜 Terms</a>
-    <a href="#" onclick="openPage('dmcaPage');closeMobileMenu();return false;">©️ DMCA</a>
+    <a href="#" onclick="openPage('dmcaPage');closeMobileMenu();return false;">⚖️ DMCA</a>
   </nav>
 </aside>
 
@@ -502,7 +498,7 @@ body.dark .privacy-contact-link{color:#60a5fa;}
   <h1>
     <span class="white">Nu</span> <span class="grad">Tools</span>
   </h1>
-  <p class="hero-sub">Premium Tools, Apps &amp; Utilities — All Free to Download. Trusted by users worldwide.</p>
+  <p class="hero-sub">Premium Tools, Apps &amp; Utilities</p>
   <div class="hero-stats">
     <div class="hero-stats-row">
       <div class="hero-stat"><span>🧰</span> <b id="heroCount">47</b> tools</div>
@@ -602,12 +598,13 @@ body.dark .privacy-contact-link{color:#60a5fa;}
 <div class="vip-section">
   <div class="vip-inner">
     <div class="vip-title">💎 How to Get VIP Access</div>
-    <p style="font-size:12px;color:var(--muted);margin-bottom:4px;">VIP tools are exclusive files with special access keys. Here's how to get in:</p>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:4px;">VIP tools are exclusive, paid files unlocked with a personal access key. Here's how it works:</p>
     <div class="vip-steps">
-      <div class="vip-step"><span class="vip-step-num">1</span> Go to the 💎 VIP category</div>
-      <div class="vip-step"><span class="vip-step-num">2</span> Click on the tool you want</div>
-      <div class="vip-step"><span class="vip-step-num">3</span> Contact admin via email to get your access key</div>
-      <div class="vip-step"><span class="vip-step-num">4</span> Enter the key and download instantly</div>
+      <div class="vip-step"><span class="vip-step-num">1</span> Go to the 💎 VIP category and pick a tool</div>
+      <div class="vip-step"><span class="vip-step-num">2</span> Pay the listed price via crypto (ETH / TRC20 / Binance)</div>
+      <div class="vip-step"><span class="vip-step-num">3</span> Email your payment screenshot + transaction ID</div>
+      <div class="vip-step"><span class="vip-step-num">4</span> We verify it and send you a personal access key</div>
+      <div class="vip-step"><span class="vip-step-num">5</span> Enter the key on the tool page to unlock the download</div>
     </div>
     <a href="mailto:nuwamanya.ony@gmail.com?subject=VIP Access Key Request" style="display:inline-flex;align-items:center;gap:6px;margin-top:14px;background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.3);color:#7c3aed;padding:8px 14px;border-radius:8px;text-decoration:none;font-size:12px;font-weight:700;font-family:'Space Grotesk',sans-serif;">📧 Contact Admin for VIP Key</a>
   </div>
@@ -727,7 +724,7 @@ window.addEventListener('beforeinstallprompt',(e)=>{
 const manifestData = {
   name: "Nu Tools — Software Support",
   short_name: "Nu Tools",
-  description: "Premium Tools, Apps & Utilities — All Free to Download",
+  description: "Premium Tools, Apps & Utilities",
   start_url: "/",
   display: "standalone",
   background_color: "#06090f",
@@ -788,7 +785,7 @@ function jumpToCategory(cat){
 }
 
 function miniCard(t){
-  const btnLabel=t.keyLocked?'🔐 VIP':t.locked?'🔒 Locked':'Install';
+  const btnLabel=t.keyLocked?'🔐 VIP':t.locked?'🔒 Locked':'Download APK';
   return `<div class="trend-card" onclick="openModal(${t.id})">
     <div class="trend-icon" style="background:${t.color}22;">${t.emoji}</div>
     <div class="trend-name">${t.name}</div>
@@ -825,7 +822,7 @@ function buildCard(t,delay){
         <div class="tool-desc">${t.desc}</div>
       </div>
       <div class="featured-actions">
-        <button class="dl-btn primary" onclick="event.stopPropagation();handleDl(${t.id})">⬇️ Install</button>
+        <button class="dl-btn primary" onclick="event.stopPropagation();handleDl(${t.id})">⬇️ Download APK</button>
         ${t.previewUrl?`<button class="dl-btn outline" onclick="event.stopPropagation();">👁️ Preview</button>`:''}
       </div>
     </div>`;
@@ -837,7 +834,7 @@ function buildCard(t,delay){
   const badgeLabel = isNew ? 'NEW' : getBadgeLabel(t.badge);
   const badgeClass = isNew ? 'badge badge-new-tool' : getBadgeClass(t.badge);
   const btnClass=t.keyLocked?'dl-btn-mini outline':t.locked?'dl-btn-mini locked':'dl-btn-mini';
-  const btnLabel=t.keyLocked?'🔐 VIP':t.locked?'🔒 Locked':'Install';
+  const btnLabel=t.keyLocked?'🔐 VIP':t.locked?'🔒 Locked':'Download APK';
   return `<div class="tool-card" id="tool-${t.id}" style="animation-delay:${delay}s" onclick="openModal(${t.id})">
     <div class="card-top">
       <div class="tool-icon" style="background:${t.color}22;">${t.emoji}</div>
@@ -988,12 +985,12 @@ function openModal(id){
         <!-- ACCESS KEY INPUT -->
         <input id="accessKeyInput" type="password" placeholder="Enter your access key..." style="width:100%;padding:8px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:13px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='#7c3aed'" onblur="this.style.borderColor=''" onkeydown="if(event.key==='Enter')checkAccessKey(${t.id})">
         <div id="keyError" style="display:none;font-size:11px;color:#dc2626;text-align:center;font-weight:600;">❌ Wrong access key. Contact admin for help.</div>
-        <button class="dl-btn primary" style="padding:9px 0;" onclick="checkAccessKey(${t.id})">🔓 Unlock & Install</button>
+        <button class="dl-btn primary" style="padding:9px 0;" onclick="checkAccessKey(${t.id})">🔓 Unlock & Download APK</button>
       </div>`;
   } else if(t.locked){
     btns.innerHTML=`<button class="dl-btn locked">🔒 VIP Only</button>`;
   } else {
-    btns.innerHTML=`<button class="dl-btn primary" onclick="handleDl(${t.id})">⬇️ Install ${t.name}</button>`+
+    btns.innerHTML=`<button class="dl-btn primary" onclick="handleDl(${t.id})">⬇️ Download APK</button>`+
       (t.previewUrl?`<button class="dl-btn outline">👁️ Preview</button>`:'');
   }
   document.getElementById('modal').classList.add('open');
