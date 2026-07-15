@@ -820,7 +820,7 @@ function miniCard(t){
     <div class="trend-icon" style="background:${t.color}22;">${t.emoji}</div>
     <div class="trend-name">${t.name}</div>
     <div style="font-size:9.5px;color:var(--muted);opacity:.75;margin-top:-4px;">Dev: Software Support</div>
-    <button class="trend-dl" onclick="event.stopPropagation();handleDl(${t.id})">${btnLabel}</button>
+    <button class="trend-dl" onclick="event.stopPropagation();openModal(${t.id})">${btnLabel}</button>
   </div>`;
 }
 
