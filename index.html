@@ -985,6 +985,7 @@ async function downloadAIImage(){
   dlBtn.disabled=true;
   try{
     const resp=await fetch(img.src);
+    if(!resp.ok) throw new Error('bad response');
     const blob=await resp.blob();
     const blobUrl=URL.createObjectURL(blob);
     const a=document.createElement('a');
@@ -994,11 +995,13 @@ async function downloadAIImage(){
     a.click();
     document.body.removeChild(a);
     setTimeout(()=>URL.revokeObjectURL(blobUrl),3000);
+    dlBtn.textContent=originalLabel;
+    dlBtn.disabled=false;
   }catch(e){
-    window.open(img.src,'_blank');
+    dlBtn.textContent='☝️ Long-press image above instead';
+    dlBtn.disabled=true;
+    setTimeout(()=>{dlBtn.textContent=originalLabel;dlBtn.disabled=false;},3000);
   }
-  dlBtn.textContent=originalLabel;
-  dlBtn.disabled=false;
 }
 
 function openModal(id){
@@ -1086,7 +1089,8 @@ function openModal(id){
         <button class="dl-btn primary" id="aiGenBtn" onclick="generateAIImage()">✨ Generate Image</button>
         <div id="aiImgWrap" style="display:none;flex-direction:column;gap:8px;">
           <img id="aiImgResult" style="width:100%;border-radius:12px;border:1px solid var(--border);" alt="Generated image">
-          <button class="dl-btn outline" id="aiImgDownload" onclick="downloadAIImage()">⬇️ Save Image</button>
+          <div style="font-size:10.5px;color:var(--muted);text-align:center;">📌 Tip: press and hold the image above, then choose "Save image" or "Download" to save it straight to your gallery.</div>
+          <button class="dl-btn outline" id="aiImgDownload" onclick="downloadAIImage()">⬇️ Try Save Button</button>
         </div>
         <div id="aiImgError" style="display:none;font-size:11px;color:#dc2626;text-align:center;font-weight:600;"></div>
       </div>`;
