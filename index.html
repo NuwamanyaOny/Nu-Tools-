@@ -980,7 +980,8 @@ async function sendAIChat(){
   let transcript='';
   aiChatHistory.forEach(m=>{transcript+=(m.role==='user'?'User: ':'Assistant: ')+m.content+'\n';});
   transcript+='Assistant:';
-  const url=`https://text.pollinations.ai/${encodeURIComponent(transcript)}?model=openai&system=${encodeURIComponent('You are a friendly, helpful assistant. Keep replies concise and conversational.')}`;
+  const pollinationsUrl=`https://text.pollinations.ai/${encodeURIComponent(transcript)}?model=openai&system=${encodeURIComponent('You are a friendly, helpful assistant. Keep replies concise and conversational.')}`;
+  const url=`https://api.allorigins.win/raw?url=${encodeURIComponent(pollinationsUrl)}`;
   try{
     const resp=await fetch(url);
     if(!resp.ok)throw new Error('bad response');
