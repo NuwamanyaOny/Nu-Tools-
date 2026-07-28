@@ -965,6 +965,22 @@ function aiEscapeHtml(str){
   return d.innerHTML;
 }
 
+async function aiFetchWithTimeout(url,ms){
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),ms);
+  try{
+    const resp=await fetch(url,{signal:controller.signal});
+    clearTimeout(timer);
+    if(!resp.ok)throw new Error('bad status');
+    const text=(await resp.text()).trim();
+    if(!text)throw new Error('empty response');
+    return text;
+  }catch(e){
+    clearTimeout(timer);
+    throw e;
+  }
+}
+
 async function sendAIChat(){
   const input=document.getElementById('aiChatInput');
   const log=document.getElementById('aiChatLog');
@@ -980,17 +996,26 @@ async function sendAIChat(){
   let transcript='';
   aiChatHistory.forEach(m=>{transcript+=(m.role==='user'?'User: ':'Assistant: ')+m.content+'\n';});
   transcript+='Assistant:';
-  const pollinationsUrl=`https://text.pollinations.ai/${encodeURIComponent(transcript)}?model=openai&system=${encodeURIComponent('You are a friendly, helpful assistant. Keep replies concise and conversational.')}`;
-  const url=`https://api.allorigins.win/raw?url=${encodeURIComponent(pollinationsUrl)}`;
-  try{
-    const resp=await fetch(url);
-    if(!resp.ok)throw new Error('bad response');
-    let reply=(await resp.text()).trim();
+  const sys=encodeURIComponent('You are a friendly, helpful assistant. Keep replies concise and conversational.');
+  const encodedPrompt=encodeURIComponent(transcript);
+  const attempts=[
+    `https://gen.pollinations.ai/text/${encodedPrompt}?system=${sys}`,
+    `https://text.pollinations.ai/${encodedPrompt}?model=openai&system=${sys}`,
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://text.pollinations.ai/${encodedPrompt}?model=openai&system=${sys}`)}`,
+    `https://corsproxy.io/?url=${encodeURIComponent(`https://text.pollinations.ai/${encodedPrompt}?model=openai&system=${sys}`)}`
+  ];
+  let reply=null;
+  for(const attemptUrl of attempts){
+    try{
+      reply=await aiFetchWithTimeout(attemptUrl,12000);
+      if(reply)break;
+    }catch(e){/* try next */}
+  }
+  document.getElementById('aiTyping')?.remove();
+  if(reply){
     aiChatHistory.push({role:'assistant',content:reply});
-    document.getElementById('aiTyping')?.remove();
     log.insertAdjacentHTML('beforeend',`<div class="ai-bubble assistant">${aiEscapeHtml(reply)}</div>`);
-  }catch(e){
-    document.getElementById('aiTyping')?.remove();
+  }else{
     log.insertAdjacentHTML('beforeend',`<div class="ai-bubble assistant">⚠️ Something went wrong. Please try again.</div>`);
   }
   log.scrollTop=log.scrollHeight;
