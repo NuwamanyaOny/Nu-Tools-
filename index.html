@@ -203,6 +203,8 @@ body.dark .dl-btn-mini.outline{color:#60a5fa;}
 body.dark .dl-btn.outline{color:#60a5fa;}
 .dl-btn.locked{background:var(--faint);color:var(--muted);cursor:default;}
 .dl-btn.locked:hover{opacity:1;transform:none;}
+.ai-spinner{width:34px;height:34px;border-radius:50%;border:3px solid rgba(124,58,237,0.15);border-top-color:#7c3aed;animation:ai-spin .8s linear infinite;}
+@keyframes ai-spin{to{transform:rotate(360deg);}}
 
 /* TRENDING STRIP */
 .trending-wrap{position:relative;z-index:1;padding:2px 0 18px;}
@@ -951,27 +953,35 @@ function generateAIImage(){
   const errEl=document.getElementById('aiImgError');
   const wrap=document.getElementById('aiImgWrap');
   const btn=document.getElementById('aiGenBtn');
+  const overlay=document.getElementById('aiLoadingOverlay');
+  const img=document.getElementById('aiImgResult');
+  const dlBtn=document.getElementById('aiImgDownload');
   errEl.style.display='none';
   if(!prompt){
     errEl.textContent='Please describe what you want to see first.';
     errEl.style.display='block';
     return;
   }
-  const originalText=btn.textContent;
+  wrap.style.display='flex';
+  overlay.style.display='flex';
+  img.style.display='none';
+  dlBtn.style.display='none';
   btn.textContent='⏳ Generating...';
   btn.disabled=true;
   const seed=Math.floor(Math.random()*1000000);
   const url=`https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=768&height=768&seed=${seed}&nologo=true`;
-  const img=document.getElementById('aiImgResult');
   img.onload=()=>{
-    wrap.style.display='flex';
-    btn.textContent=originalText;
+    overlay.style.display='none';
+    img.style.display='block';
+    dlBtn.style.display='block';
+    btn.textContent='✨ Generate Image';
     btn.disabled=false;
   };
   img.onerror=()=>{
+    wrap.style.display='none';
     errEl.textContent='Generation failed. Try a different prompt or try again in a moment.';
     errEl.style.display='block';
-    btn.textContent=originalText;
+    btn.textContent='✨ Generate Image';
     btn.disabled=false;
   };
   img.src=url;
@@ -980,7 +990,6 @@ function generateAIImage(){
 async function downloadAIImage(){
   const dlBtn=document.getElementById('aiImgDownload');
   const img=document.getElementById('aiImgResult');
-  const originalLabel=dlBtn.textContent;
   dlBtn.textContent='⏳ Preparing...';
   dlBtn.disabled=true;
   try{
@@ -995,12 +1004,11 @@ async function downloadAIImage(){
     a.click();
     document.body.removeChild(a);
     setTimeout(()=>URL.revokeObjectURL(blobUrl),3000);
-    dlBtn.textContent=originalLabel;
+    dlBtn.textContent='⬇️ Download Image';
     dlBtn.disabled=false;
   }catch(e){
-    dlBtn.textContent='☝️ Long-press image above instead';
-    dlBtn.disabled=true;
-    setTimeout(()=>{dlBtn.textContent=originalLabel;dlBtn.disabled=false;},3000);
+    dlBtn.textContent='☝️ Long-press image instead';
+    setTimeout(()=>{dlBtn.textContent='⬇️ Download Image';dlBtn.disabled=false;},3000);
   }
 }
 
@@ -1088,9 +1096,14 @@ function openModal(id){
         <textarea id="aiPrompt" placeholder="Describe the image you want... e.g. a cyberpunk city at night, neon lights, rain" style="width:100%;min-height:70px;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:13px;font-family:'Space Grotesk',sans-serif;resize:vertical;"></textarea>
         <button class="dl-btn primary" id="aiGenBtn" onclick="generateAIImage()">✨ Generate Image</button>
         <div id="aiImgWrap" style="display:none;flex-direction:column;gap:8px;">
-          <img id="aiImgResult" style="width:100%;border-radius:12px;border:1px solid var(--border);" alt="Generated image">
-          <div style="font-size:10.5px;color:var(--muted);text-align:center;">📌 Tip: press and hold the image above, then choose "Save image" or "Download" to save it straight to your gallery.</div>
-          <button class="dl-btn outline" id="aiImgDownload" onclick="downloadAIImage()">⬇️ Try Save Button</button>
+          <div id="aiImgBox" style="width:100%;aspect-ratio:1/1;border-radius:12px;border:1px solid var(--border);overflow:hidden;position:relative;background:var(--faint);">
+            <div id="aiLoadingOverlay" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;">
+              <div class="ai-spinner"></div>
+              <div style="font-size:11px;color:var(--muted);font-weight:600;">Generating your image...</div>
+            </div>
+            <img id="aiImgResult" style="width:100%;height:100%;object-fit:cover;display:none;" alt="Generated image">
+          </div>
+          <button class="dl-btn outline" id="aiImgDownload" onclick="downloadAIImage()" style="display:none;">⬇️ Download Image</button>
         </div>
         <div id="aiImgError" style="display:none;font-size:11px;color:#dc2626;text-align:center;font-weight:600;"></div>
       </div>`;
