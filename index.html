@@ -963,7 +963,6 @@ function generateAIImage(){
   const seed=Math.floor(Math.random()*1000000);
   const url=`https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=768&height=768&seed=${seed}&nologo=true`;
   const img=document.getElementById('aiImgResult');
-  const dl=document.getElementById('aiImgDownload');
   img.onload=()=>{
     wrap.style.display='flex';
     btn.textContent=originalText;
@@ -976,7 +975,30 @@ function generateAIImage(){
     btn.disabled=false;
   };
   img.src=url;
-  dl.href=url;
+}
+
+async function downloadAIImage(){
+  const dlBtn=document.getElementById('aiImgDownload');
+  const img=document.getElementById('aiImgResult');
+  const originalLabel=dlBtn.textContent;
+  dlBtn.textContent='⏳ Preparing...';
+  dlBtn.disabled=true;
+  try{
+    const resp=await fetch(img.src);
+    const blob=await resp.blob();
+    const blobUrl=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=blobUrl;
+    a.download='nu-tools-ai-image.jpg';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(()=>URL.revokeObjectURL(blobUrl),3000);
+  }catch(e){
+    window.open(img.src,'_blank');
+  }
+  dlBtn.textContent=originalLabel;
+  dlBtn.disabled=false;
 }
 
 function openModal(id){
@@ -1064,7 +1086,7 @@ function openModal(id){
         <button class="dl-btn primary" id="aiGenBtn" onclick="generateAIImage()">✨ Generate Image</button>
         <div id="aiImgWrap" style="display:none;flex-direction:column;gap:8px;">
           <img id="aiImgResult" style="width:100%;border-radius:12px;border:1px solid var(--border);" alt="Generated image">
-          <a id="aiImgDownload" class="dl-btn outline" download="nu-tools-ai-image.jpg" style="text-decoration:none;">⬇️ Save Image</a>
+          <button class="dl-btn outline" id="aiImgDownload" onclick="downloadAIImage()">⬇️ Save Image</button>
         </div>
         <div id="aiImgError" style="display:none;font-size:11px;color:#dc2626;text-align:center;font-weight:600;"></div>
       </div>`;
