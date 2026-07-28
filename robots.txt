@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://nu-tools.vercel.app/sitemap.xml
