@@ -1069,10 +1069,16 @@ function openModal(id){
           <div style="font-size:10px;color:var(--muted);line-height:1.6;">✓ VIP file access &nbsp;·&nbsp; ✓ Unique key &nbsp;·&nbsp; ✓ Instant download &nbsp;·&nbsp; ✓ 24/7 support</div>
         </div>
 
+        <!-- AUTO PAYMENT (INSTANT) -->
+        <div id="autoPaySection">
+          <button class="dl-btn primary" style="padding:10px 0;" onclick="startAutoPayment(${t.id})">⚡ Pay Instantly with USDT (Auto-Unlock)</button>
+          <div style="font-size:9.5px;color:var(--muted);text-align:center;margin-top:4px;">Automatic — unlocks the moment payment is confirmed on-chain</div>
+        </div>
+
         <!-- STEP 1 DIVIDER -->
-        <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
           <div style="flex:1;height:1px;background:var(--border);"></div>
-          <span style="font-size:10px;color:var(--muted);font-weight:600;">Step 1</span>
+          <span style="font-size:10px;color:var(--muted);font-weight:600;">Or pay manually</span>
           <div style="flex:1;height:1px;background:var(--border);"></div>
         </div>
         <div style="font-size:11px;font-weight:700;color:var(--text);text-align:center;">Send payment to any of these:</div>
@@ -1182,6 +1188,68 @@ const VIP_KEYS = {
   57: '9b748cc50e44e66b0d789618ab2b5c6e7ec2958d18a5fcdf326bc13ab0bb0066',
   63: 'f2534059da9f0c4b345f1db6ba9937e139f898dbc4be1c623bc1a544035aa5e0'
 };
+
+let paymentPollTimer = null;
+
+async function startAutoPayment(toolId){
+  const section = document.getElementById('autoPaySection');
+  if(!section) return;
+  section.innerHTML = `<div style="text-align:center;font-size:12px;color:var(--muted);padding:10px;">⏳ Creating payment...</div>`;
+
+  try{
+    const resp = await fetch('/api/create-payment', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ toolId })
+    });
+    const data = await resp.json();
+    if(!resp.ok || !data.payment_id) throw new Error(data.error || 'Failed to create payment');
+
+    section.innerHTML = `
+      <div style="background:var(--faint);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center;">
+        <div style="font-size:10px;color:var(--muted);font-weight:700;margin-bottom:6px;">SEND EXACTLY</div>
+        <div style="font-size:18px;font-weight:900;color:var(--text);font-family:'Space Grotesk',sans-serif;">${data.pay_amount} ${(data.pay_currency||'').toUpperCase()}</div>
+        <div style="font-size:9.5px;color:var(--muted);margin:6px 0 4px;">To this address (USDT TRC20):</div>
+        <div onclick="copyAddress(this)" data-address="${data.pay_address}" style="cursor:pointer;font-size:10.5px;word-break:break-all;font-family:monospace;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px;">${data.pay_address} <span style="color:#7c3aed;font-weight:700;">📋</span></div>
+        <div id="autoPayStatus" style="margin-top:10px;display:flex;align-items:center;justify-content:center;gap:8px;">
+          <div class="ai-spinner" style="width:16px;height:16px;border-width:2px;"></div>
+          <span style="font-size:11px;color:var(--muted);">Waiting for payment...</span>
+        </div>
+      </div>`;
+
+    if(paymentPollTimer) clearInterval(paymentPollTimer);
+    paymentPollTimer = setInterval(() => pollPaymentStatus(toolId, data.payment_id), 6000);
+  }catch(e){
+    section.innerHTML = `<div style="text-align:center;font-size:11px;color:#dc2626;font-weight:600;padding:8px;">⚠️ ${e.message || 'Something went wrong. Try again.'}</div>
+      <button class="dl-btn primary" style="padding:10px 0;margin-top:8px;" onclick="startAutoPayment(${toolId})">Try Again</button>`;
+  }
+}
+
+async function pollPaymentStatus(toolId, paymentId){
+  const statusEl = document.getElementById('autoPayStatus');
+  try{
+    const resp = await fetch(`/api/check-payment?payment_id=${paymentId}`);
+    const data = await resp.json();
+    if(!resp.ok) return;
+
+    if(data.status === 'finished' || data.status === 'confirmed'){
+      clearInterval(paymentPollTimer);
+      if(statusEl) statusEl.innerHTML = `<span style="font-size:11px;color:#10b981;font-weight:700;">✅ Payment confirmed! Unlocking...</span>`;
+      const revealResp = await fetch(`/api/reveal-key?toolId=${toolId}&payment_id=${paymentId}`);
+      const revealData = await revealResp.json();
+      if(revealResp.ok && revealData.key){
+        const input = document.getElementById('accessKeyInput');
+        if(input) input.value = revealData.key;
+        checkAccessKey(toolId);
+      }
+    }else if(data.status === 'failed' || data.status === 'expired'){
+      clearInterval(paymentPollTimer);
+      if(statusEl) statusEl.innerHTML = `<span style="font-size:11px;color:#dc2626;font-weight:700;">⚠️ Payment ${data.status}. Please try again.</span>`;
+    }else if(statusEl){
+      statusEl.innerHTML = `<div class="ai-spinner" style="width:16px;height:16px;border-width:2px;"></div><span style="font-size:11px;color:var(--muted);">Status: ${data.status || 'waiting'}...</span>`;
+    }
+  }catch(e){ /* keep polling silently */ }
+}
 
 async function checkAccessKey(id){
   const t=TOOLS.find(x=>x.id===id);
