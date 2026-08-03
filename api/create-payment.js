@@ -25,7 +25,7 @@ export default async function handler(req, res) {
 
   const orderId = `nu-${toolId}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
-  try {
+  async function attemptPayment(amount) {
     const response = await fetch("https://api.nowpayments.io/v1/payment", {
       method: "POST",
       headers: {
@@ -33,26 +33,42 @@ export default async function handler(req, res) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        price_amount: tool.price,
+        price_amount: amount,
         price_currency: "usd",
         pay_currency: "usdttrc20",
         order_id: orderId,
         order_description: `Nu Tools VIP — ${tool.name}`
       })
     });
-
     const data = await response.json();
+    return { ok: response.ok, data };
+  }
 
-    if (!response.ok) {
-      return res.status(502).json({ error: data.message || "Payment creation failed" });
+  try {
+    let amount = tool.price;
+    let result = await attemptPayment(amount);
+
+    // NOWPayments enforces a minimum crypto amount that can fluctuate with
+    // network conditions. If our price falls under it, bump up and retry.
+    let retries = 0;
+    while (!result.ok && /less than minimal/i.test(result.data.message || "") && retries < 4) {
+      amount += 2;
+      result = await attemptPayment(amount);
+      retries++;
     }
 
+    if (!result.ok) {
+      return res.status(502).json({ error: result.data.message || "Payment creation failed" });
+    }
+
+    const data = result.data;
     return res.status(200).json({
       payment_id: data.payment_id,
       pay_address: data.pay_address,
       pay_amount: data.pay_amount,
       pay_currency: data.pay_currency,
-      order_id: orderId
+      order_id: orderId,
+      charged_usd: amount
     });
   } catch (err) {
     return res.status(500).json({ error: "Unexpected server error" });
