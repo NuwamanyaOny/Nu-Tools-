@@ -2,8 +2,8 @@
 // Prices are defined here server-side so a user can't tamper with the amount from the browser.
 
 const VIP_TOOLS = {
-  57: { name: "Sharp Bettor Analysis Pro", price: 5 },
-  63: { name: "Fixed Correct Score", price: 10 }
+  57: { name: "Sharp Bettor Analysis Pro", price: 13 },
+  63: { name: "Fixed Correct Score", price: 15 }
 };
 
 export default async function handler(req, res) {
