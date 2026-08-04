@@ -2,8 +2,8 @@
 // then reveals the VIP access key only if the payment is genuinely confirmed.
 
 const VIP_TOOLS = {
-  57: { name: "Sharp Bettor Analysis Pro", price: 5, key: "NU-CG0CP7QT" },
-  63: { name: "Fixed Correct Score", price: 10, key: "NU-QEL4AS6E" }
+  57: { name: "Sharp Bettor Analysis Pro", price: 13, key: "NU-CG0CP7QT" },
+  63: { name: "Fixed Correct Score", price: 15, key: "NU-QEL4AS6E" }
 };
 
 const PAID_STATUSES = ["finished", "confirmed"];
