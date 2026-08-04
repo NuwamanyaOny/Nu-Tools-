@@ -1085,6 +1085,7 @@ function openModal(id){
         <div id="keyError" style="display:none;font-size:11px;color:#dc2626;text-align:center;font-weight:600;">❌ Wrong access key. Try again or pay with the button above.</div>
         <button class="dl-btn primary" style="padding:9px 0;" onclick="checkAccessKey(${t.id})">🔓 Unlock & Download APK</button>
       </div>`;
+    resumePendingPayment(t.id);
   } else if(t.locked){
     btns.innerHTML=`<button class="dl-btn locked">🔒 VIP Only</button>`;
   } else if(t.webapp==='ai-image'){
@@ -1151,6 +1152,47 @@ const VIP_KEYS = {
 
 let paymentPollTimer = null;
 
+function savePendingPayment(toolId, payment){
+  try{
+    localStorage.setItem(`nuPendingPay_${toolId}`, JSON.stringify({...payment, savedAt: Date.now()}));
+  }catch(e){ /* localStorage unavailable, payment still works, just won't resume */ }
+}
+
+function clearPendingPayment(toolId){
+  try{ localStorage.removeItem(`nuPendingPay_${toolId}`); }catch(e){}
+}
+
+function renderWaitingUI(section, data){
+  section.innerHTML = `
+    <div style="background:var(--faint);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center;">
+      <div style="font-size:10px;color:var(--muted);font-weight:700;margin-bottom:6px;">SEND EXACTLY</div>
+      <div style="font-size:18px;font-weight:900;color:var(--text);font-family:'Space Grotesk',sans-serif;">${data.pay_amount} ${(data.pay_currency||'').toUpperCase()}</div>
+      ${data.charged_usd ? `<div style="font-size:9.5px;color:var(--muted);">(≈ $${data.charged_usd} — adjusted slightly for network minimums)</div>` : ''}
+      <div style="font-size:9.5px;color:var(--muted);margin:6px 0 4px;">To this address (USDT TRC20):</div>
+      <div onclick="copyAddress(this)" data-address="${data.pay_address}" style="cursor:pointer;font-size:10.5px;word-break:break-all;font-family:monospace;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px;">${data.pay_address} <span style="color:#7c3aed;font-weight:700;">📋</span></div>
+      <div id="autoPayStatus" style="margin-top:10px;display:flex;align-items:center;justify-content:center;gap:8px;">
+        <div class="ai-spinner" style="width:16px;height:16px;border-width:2px;"></div>
+        <span style="font-size:11px;color:var(--muted);">Waiting for payment...</span>
+      </div>
+      <div style="font-size:9px;color:var(--muted);margin-top:8px;">Already sent it and closed this tab by accident? Just reopen this tool — it'll pick up right where it left off.</div>
+    </div>`;
+}
+
+function resumePendingPayment(toolId){
+  let saved;
+  try{ saved = JSON.parse(localStorage.getItem(`nuPendingPay_${toolId}`)); }catch(e){ return; }
+  if(!saved || !saved.payment_id) return;
+  // Ignore stale sessions older than 3 hours — start fresh instead
+  if(Date.now() - saved.savedAt > 3 * 60 * 60 * 1000){ clearPendingPayment(toolId); return; }
+
+  const section = document.getElementById('autoPaySection');
+  if(!section) return;
+  renderWaitingUI(section, saved);
+  if(paymentPollTimer) clearInterval(paymentPollTimer);
+  pollPaymentStatus(toolId, saved.payment_id);
+  paymentPollTimer = setInterval(() => pollPaymentStatus(toolId, saved.payment_id), 6000);
+}
+
 async function startAutoPayment(toolId){
   const section = document.getElementById('autoPaySection');
   if(!section) return;
@@ -1165,18 +1207,8 @@ async function startAutoPayment(toolId){
     const data = await resp.json();
     if(!resp.ok || !data.payment_id) throw new Error(data.error || 'Failed to create payment');
 
-    section.innerHTML = `
-      <div style="background:var(--faint);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center;">
-        <div style="font-size:10px;color:var(--muted);font-weight:700;margin-bottom:6px;">SEND EXACTLY</div>
-        <div style="font-size:18px;font-weight:900;color:var(--text);font-family:'Space Grotesk',sans-serif;">${data.pay_amount} ${(data.pay_currency||'').toUpperCase()}</div>
-        ${data.charged_usd ? `<div style="font-size:9.5px;color:var(--muted);">(≈ $${data.charged_usd} — adjusted slightly for network minimums)</div>` : ''}
-        <div style="font-size:9.5px;color:var(--muted);margin:6px 0 4px;">To this address (USDT TRC20):</div>
-        <div onclick="copyAddress(this)" data-address="${data.pay_address}" style="cursor:pointer;font-size:10.5px;word-break:break-all;font-family:monospace;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px;">${data.pay_address} <span style="color:#7c3aed;font-weight:700;">📋</span></div>
-        <div id="autoPayStatus" style="margin-top:10px;display:flex;align-items:center;justify-content:center;gap:8px;">
-          <div class="ai-spinner" style="width:16px;height:16px;border-width:2px;"></div>
-          <span style="font-size:11px;color:var(--muted);">Waiting for payment...</span>
-        </div>
-      </div>`;
+    savePendingPayment(toolId, data);
+    renderWaitingUI(section, data);
 
     if(paymentPollTimer) clearInterval(paymentPollTimer);
     paymentPollTimer = setInterval(() => pollPaymentStatus(toolId, data.payment_id), 6000);
@@ -1195,6 +1227,7 @@ async function pollPaymentStatus(toolId, paymentId){
 
     if(data.status === 'finished' || data.status === 'confirmed'){
       clearInterval(paymentPollTimer);
+      clearPendingPayment(toolId);
       if(statusEl) statusEl.innerHTML = `<span style="font-size:11px;color:#10b981;font-weight:700;">✅ Payment confirmed! Unlocking...</span>`;
       const revealResp = await fetch(`/api/reveal-key?toolId=${toolId}&payment_id=${paymentId}`);
       const revealData = await revealResp.json();
@@ -1205,6 +1238,7 @@ async function pollPaymentStatus(toolId, paymentId){
       }
     }else if(data.status === 'failed' || data.status === 'expired'){
       clearInterval(paymentPollTimer);
+      clearPendingPayment(toolId);
       if(statusEl) statusEl.innerHTML = `<span style="font-size:11px;color:#dc2626;font-weight:700;">⚠️ Payment ${data.status}. Please try again.</span>`;
     }else if(statusEl){
       statusEl.innerHTML = `<div class="ai-spinner" style="width:16px;height:16px;border-width:2px;"></div><span style="font-size:11px;color:var(--muted);">Status: ${data.status || 'waiting'}...</span>`;
