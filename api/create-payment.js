@@ -23,9 +23,7 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: "Server not configured" });
   }
 
-  const orderId = `nu-${toolId}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-
-  async function attemptPayment(amount) {
+  async function attemptPayment(amount, attemptOrderId) {
     const response = await fetch("https://api.nowpayments.io/v1/payment", {
       method: "POST",
       headers: {
@@ -36,25 +34,34 @@ export default async function handler(req, res) {
         price_amount: amount,
         price_currency: "usd",
         pay_currency: "usdttrc20",
-        order_id: orderId,
+        order_id: attemptOrderId,
         order_description: `Nu Tools VIP — ${tool.name}`
       })
     });
-    const data = await response.json();
+    let data;
+    try {
+      data = await response.json();
+    } catch (e) {
+      data = { message: `Non-JSON response (status ${response.status})` };
+    }
     return { ok: response.ok, data };
   }
 
   try {
+    const baseOrderId = `nu-${toolId}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
     let amount = tool.price;
-    let result = await attemptPayment(amount);
+    let attempt = 0;
+    let orderId = `${baseOrderId}-${attempt}`;
+    let result = await attemptPayment(amount, orderId);
 
     // NOWPayments enforces a minimum crypto amount that can fluctuate with
-    // network conditions. If our price falls under it, bump up and retry.
-    let retries = 0;
-    while (!result.ok && /less than minimal/i.test(result.data.message || "") && retries < 4) {
+    // network conditions. If our price falls under it, bump up and retry
+    // with a fresh order_id each time (NOWPayments rejects duplicates).
+    while (!result.ok && /less than minimal/i.test(result.data.message || "") && attempt < 4) {
+      attempt++;
       amount += 2;
-      result = await attemptPayment(amount);
-      retries++;
+      orderId = `${baseOrderId}-${attempt}`;
+      result = await attemptPayment(amount, orderId);
     }
 
     if (!result.ok) {
@@ -71,6 +78,6 @@ export default async function handler(req, res) {
       charged_usd: amount
     });
   } catch (err) {
-    return res.status(500).json({ error: "Unexpected server error" });
+    return res.status(500).json({ error: "Unexpected server error: " + (err.message || String(err)) });
   }
 }
