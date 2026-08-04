@@ -42,7 +42,11 @@ export default async function handler(req, res) {
     try {
       data = await response.json();
     } catch (e) {
-      data = { message: `Non-JSON response (status ${response.status})` };
+      data = {
+        message: response.status === 429
+          ? "Too many attempts — please wait a minute and try again."
+          : `Non-JSON response (status ${response.status})`
+      };
     }
     return { ok: response.ok, data };
   }
@@ -57,10 +61,12 @@ export default async function handler(req, res) {
     // NOWPayments enforces a minimum crypto amount that can fluctuate with
     // network conditions. If our price falls under it, bump up and retry
     // with a fresh order_id each time (NOWPayments rejects duplicates).
+    // A short delay between attempts avoids tripping their rate limiter.
     while (!result.ok && /less than minimal/i.test(result.data.message || "") && attempt < 4) {
       attempt++;
       amount += 2;
       orderId = `${baseOrderId}-${attempt}`;
+      await new Promise(r => setTimeout(r, 700));
       result = await attemptPayment(amount, orderId);
     }
 
