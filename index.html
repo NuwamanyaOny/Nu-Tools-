@@ -620,12 +620,12 @@ body.dark .privacy-contact-link{color:#60a5fa;}
 <div class="vip-section">
   <div class="vip-inner">
     <div class="vip-title">💎 How to Get VIP Access</div>
-    <p style="font-size:12px;color:var(--muted);margin-bottom:4px;">VIP tools are exclusive, paid files unlocked instantly with crypto. Here's how it works:</p>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:4px;">VIP tools are exclusive, paid files unlocked instantly with crypto — no signup, no waiting. Here's how it works:</p>
     <div class="vip-steps">
       <div class="vip-step"><span class="vip-step-num">1</span> Go to the 💎 VIP category and pick a tool</div>
-      <div class="vip-step"><span class="vip-step-num">2</span> Tap "Pay Instantly with USDT"</div>
-      <div class="vip-step"><span class="vip-step-num">3</span> Send the exact USDT amount shown</div>
-      <div class="vip-step"><span class="vip-step-num">4</span> Download unlocks automatically the moment payment confirms on-chain</div>
+      <div class="vip-step"><span class="vip-step-num">2</span> Tap "Pay Instantly with USDT" to generate your one-time payment address</div>
+      <div class="vip-step"><span class="vip-step-num">3</span> Send the exact USDT (TRC20) amount shown from any wallet or exchange</div>
+      <div class="vip-step"><span class="vip-step-num">4</span> Leave the tab open (or safely reopen the tool later) — it auto-unlocks the moment your payment confirms on-chain</div>
     </div>
   </div>
 </div>
@@ -1115,16 +1115,44 @@ function openModal(id){
 
 function copyAddress(el){
   const addr = el.dataset.address;
-  navigator.clipboard.writeText(addr).then(()=>{
-    const icon = el.querySelector('.pay-copy-icon');
-    const original = icon.textContent;
-    icon.textContent = '✅ Copied';
+  const icon = el.querySelector('.pay-copy-icon');
+  const original = icon ? icon.textContent : '';
+
+  function showCopied(){
+    if(icon) icon.textContent = '✅ Copied!';
     el.style.borderColor = '#10b981';
-    setTimeout(()=>{ icon.textContent = original; el.style.borderColor=''; }, 1500);
-  }).catch(()=>{
-    // Fallback for browsers without clipboard API permission
-    alert('Address: ' + addr);
-  });
+    setTimeout(()=>{ if(icon) icon.textContent = original; el.style.borderColor=''; }, 1500);
+  }
+
+  function showFailed(){
+    if(icon) icon.textContent = '⚠️ Tap and hold to copy';
+    setTimeout(()=>{ if(icon) icon.textContent = original; }, 2000);
+  }
+
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(addr).then(showCopied).catch(()=>{
+      fallbackCopy(addr) ? showCopied() : showFailed();
+    });
+  }else{
+    fallbackCopy(addr) ? showCopied() : showFailed();
+  }
+}
+
+function fallbackCopy(text){
+  try{
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    return ok;
+  }catch(e){
+    return false;
+  }
 }
 
 // NOTE: This client-side key check is a convenience gate, not real security —
@@ -1169,7 +1197,7 @@ function renderWaitingUI(section, data){
       <div style="font-size:18px;font-weight:900;color:var(--text);font-family:'Space Grotesk',sans-serif;">${data.pay_amount} ${(data.pay_currency||'').toUpperCase()}</div>
       ${data.charged_usd ? `<div style="font-size:9.5px;color:var(--muted);">(≈ $${data.charged_usd} — adjusted slightly for network minimums)</div>` : ''}
       <div style="font-size:9.5px;color:var(--muted);margin:6px 0 4px;">To this address (USDT TRC20):</div>
-      <div onclick="copyAddress(this)" data-address="${data.pay_address}" style="cursor:pointer;font-size:10.5px;word-break:break-all;font-family:monospace;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px;">${data.pay_address} <span style="color:#7c3aed;font-weight:700;">📋</span></div>
+      <div onclick="copyAddress(this)" data-address="${data.pay_address}" style="cursor:pointer;font-size:10.5px;word-break:break-all;font-family:monospace;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px;transition:border-color .2s;">${data.pay_address} <span class="pay-copy-icon" style="color:#7c3aed;font-weight:700;">📋 Tap to copy</span></div>
       <div id="autoPayStatus" style="margin-top:10px;display:flex;align-items:center;justify-content:center;gap:8px;">
         <div class="ai-spinner" style="width:16px;height:16px;border-width:2px;"></div>
         <span style="font-size:11px;color:var(--muted);">Waiting for payment...</span>
