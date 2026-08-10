@@ -1,9 +1,11 @@
 // Re-verifies the payment status directly with NOWPayments (never trusts the client),
-// then reveals the VIP access key only if the payment is genuinely confirmed.
+// then reveals the actual VIP download URL only if the payment is genuinely confirmed.
+// The download URL is intentionally NOT stored anywhere in the client-side site code —
+// it only ever exists here, server-side, so it can't be found via "view source".
 
 const VIP_TOOLS = {
-  57: { name: "Sharp Bettor Analysis Pro", price: 13, key: "NU-CG0CP7QT" },
-  63: { name: "Fixed Correct Score", price: 15, key: "NU-QEL4AS6E" }
+  57: { name: "Sharp Bettor Analysis Pro", price: 13, key: "NU-5W08YSTQ", downloadUrl: "https://devuploads.com/nsdkf8cvr44g" },
+  63: { name: "Fixed Correct Score", price: 15, key: "NU-O40QUQDS", downloadUrl: "https://devuploads.com/8j8hqeugwoen" }
 };
 
 const PAID_STATUSES = ["finished", "confirmed"];
@@ -39,7 +41,7 @@ export default async function handler(req, res) {
       return res.status(402).json({ error: "Payment not confirmed yet" });
     }
 
-    return res.status(200).json({ key: tool.key });
+    return res.status(200).json({ downloadUrl: tool.downloadUrl });
   } catch (err) {
     return res.status(500).json({ error: "Unexpected server error" });
   }
