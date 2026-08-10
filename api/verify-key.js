@@ -3,7 +3,7 @@
 
 const VIP_TOOLS = {
   57: { key: "NU-5W08YSTQ", downloadUrl: "https://devuploads.com/nsdkf8cvr44g" },
-  63: { key: "NU-O40QUQDS", downloadUrl: "https://devuploads.com/8j8hqeugwoen" }
+  63: { key: "NU-O40QUQDS", downloadUrl: "https://devuploads.com/dw3owtzbf8l9" }
 };
 
 export default async function handler(req, res) {
