@@ -5,7 +5,7 @@
 
 const VIP_TOOLS = {
   57: { name: "Sharp Bettor Analysis Pro", price: 13, key: "NU-5W08YSTQ", downloadUrl: "https://devuploads.com/nsdkf8cvr44g" },
-  63: { name: "Fixed Correct Score", price: 15, key: "NU-O40QUQDS", downloadUrl: "https://devuploads.com/8j8hqeugwoen" }
+  63: { name: "Fixed Correct Score", price: 15, key: "NU-O40QUQDS", downloadUrl: "https://devuploads.com/dw3owtzbf8l9" }
 };
 
 const PAID_STATUSES = ["finished", "confirmed"];
