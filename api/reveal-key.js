@@ -4,7 +4,7 @@
 // it only ever exists here, server-side, so it can't be found via "view source".
 
 const VIP_TOOLS = {
-  63: { name: "Exact Correct Score", price: 15, downloadUrl: "https://devuploads.com/dw3owtzbf8l9" }
+  63: { name: "Exact Correct Score", price: 15, downloadUrl: "https://devuploads.com/l7e8fqmhtjkn" }
 };
 
 const PAID_STATUSES = ["finished", "confirmed"];
