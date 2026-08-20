@@ -1,35 +1,44 @@
-// Checks the live status of a NOWPayments payment by payment_id.
-// NOWPayments itself is the source of truth — no separate database needed.
+// Checks the live status of an OxaPay payment by track_id.
+// OxaPay itself is the source of truth — no separate database needed.
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { payment_id } = req.query;
-  if (!payment_id) {
-    return res.status(400).json({ error: "Missing payment_id" });
+  const { track_id } = req.query;
+  if (!track_id) {
+    return res.status(400).json({ error: "Missing track_id" });
   }
 
-  const apiKey = process.env.NOWPAYMENTS_API_KEY;
+  const apiKey = process.env.OXAPAY_API_KEY;
   if (!apiKey) {
     return res.status(500).json({ error: "Server not configured" });
   }
 
   try {
-    const response = await fetch(`https://api.nowpayments.io/v1/payment/${payment_id}`, {
-      headers: { "x-api-key": apiKey }
+    const response = await fetch(`https://api.oxapay.com/v1/payment/${track_id}`, {
+      headers: {
+        "merchant_api_key": apiKey,
+        "Content-Type": "application/json"
+      }
     });
-    const data = await response.json();
 
-    if (!response.ok) {
-      return res.status(502).json({ error: data.message || "Status check failed" });
+    let data;
+    try {
+      data = await response.json();
+    } catch (e) {
+      return res.status(502).json({ error: `Non-JSON response (status ${response.status})` });
+    }
+
+    if (!response.ok || !data.data) {
+      return res.status(502).json({ error: (data.message || data.error?.message) || "Status check failed" });
     }
 
     return res.status(200).json({
-      status: data.payment_status,
-      pay_amount: data.pay_amount,
-      actually_paid: data.actually_paid
+      status: (data.data.status || "").toLowerCase(),
+      amount: data.data.amount,
+      currency: data.data.currency
     });
   } catch (err) {
     return res.status(500).json({ error: "Unexpected server error" });
